@@ -1,13 +1,18 @@
 package com.company;
 
 
+import java.util.Scanner;
+
 public class ScannerCoordinator {
-    private final static ScannerCoordinator scannerInstance = new ScannerCoordinator();
+    private static Scanner scannerInstance;
 
     private ScannerCoordinator() {
     }
 
-    public static ScannerCoordinator getInstance() {
+    public static Scanner getInstance() {
+        if (scannerInstance == null) {
+            scannerInstance = new Scanner(System.in);
+        }
         return scannerInstance;
     }
 }
