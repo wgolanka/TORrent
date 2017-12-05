@@ -4,15 +4,22 @@ package com.company;
 import java.util.Scanner;
 
 public class ScannerCoordinator {
-    private static Scanner scannerInstance;
+
+    private static ScannerCoordinator scannerInstance;
+    private Scanner scanner;
 
     private ScannerCoordinator() {
+        scanner = new Scanner(System.in);
     }
 
-    public static Scanner getInstance() {
+    public static ScannerCoordinator getInstance() {
         if (scannerInstance == null) {
-            scannerInstance = new Scanner(System.in);
+            scannerInstance = new ScannerCoordinator();
         }
         return scannerInstance;
+    }
+
+    public Scanner getScanner() {
+        return scannerInstance.scanner;
     }
 }

@@ -52,7 +52,7 @@ public class Menu {
     int getUserInput() {
         System.out.println("getUserInput()");
         int code = -1;
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = ScannerCoordinator.getInstance().getScanner();
         try {
             code = scanner.nextInt();
             System.out.println("code: " + code);
