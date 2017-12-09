@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class Menu {
 
-    public final String EXIT = "exit";
-    public final String PULL = "pull";
-    public final String PUSH = "push";
-    public final String LIST = "list";
+    public final String EXIT = "EXIT";
+    public final static String LIST = "LIST";
+    public final static String PULL = "PULL";
+    public final static String PUSH = "PUSH";
 
 
     void showWelcomeOptions() {
@@ -18,22 +18,25 @@ public class Menu {
                 "\nPress 3 to " + PUSH + "files");
     }
 
-    int getUserWelcomeChoice() {
-        int code = -1;
+    String getUserWelcomeChoice() {
+        String code = EXIT;
 
         switch (getUserInput()) {
             case 0:
                 System.out.println("Exit successful");
+                code = EXIT;
                 break;
             case 1:
                 System.out.println("Listing files...");
-                choseHost();
+                code = LIST;
                 break;
             case 2:
                 System.out.println("Pulling file...");
+                code = PULL;
                 break;
             case 3:
                 System.out.println("Pushing file...");
+                code = PUSH;
                 break;
             default:
                 System.out.println("Please chose between 0-3");

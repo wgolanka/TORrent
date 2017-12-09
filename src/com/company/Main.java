@@ -12,10 +12,16 @@ public class Main {
 
         Menu menu = new Menu();
         System.out.println("Welcome to TORent, what would you like to do?");
-        int code = 0;
 
         menu.showWelcomeOptions();
-        code = menu.getUserWelcomeChoice();
+        String code = menu.getUserWelcomeChoice();
+
+        if (code.equals(Menu.LIST)) {
+            client.sendServerCommandToListFiles();
+            client.sendFileListToServer();
+        }
+
+//        TODO: Firstly I have to ask server about certain host files, then he ask this host to send the to him.
 
 
     }

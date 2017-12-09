@@ -9,7 +9,7 @@ public class Client {
 
     String hostName;
     int portNumber;
-    ArrayList<String> fileNames;
+    ArrayList<String> fileNames = new ArrayList<>();
 
     public Client(String hostName, int portNumber) {
         this.hostName = hostName;
@@ -18,9 +18,6 @@ public class Client {
 
     void getFilesList() {
 
-        if (fileNames == null) {
-            fileNames = new ArrayList<>();
-        }
         String folderPath = "/Users/wgolanka/Documents/School/#3 semester/SKJ/Tor/TORrent_2";
         File folder = new File(folderPath);
         File[] listOfFiles = folder.listFiles();
@@ -38,36 +35,37 @@ public class Client {
 //        }
     }
 
+    void sendServerCommandToListFiles() {
+        System.out.println("in: sendServerCommandToListFiles");
+        try (Socket clientSocket = new Socket(hostName, portNumber)) {
 
-    public static void main(String[] args) throws IOException {
+            DataOutputStream outToServer =
+                    new DataOutputStream(clientSocket.getOutputStream());
 
-        if (args.length != 2) {
-            System.err.println(
-                    "Usage: java Client <host name> <port number>");
+            outToServer.writeBytes(Menu.LIST + " "
+                    + String.valueOf(fileNames.size()));
+
+        } catch (UnknownHostException e) {
+            System.err.println("Don't know about host " + hostName);
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for the connection to " +
+                    hostName);
             System.exit(1);
         }
+    }
 
 
-        String testFilesSending[] = {"Ala.jpg", "ma.png", "kota.mp3"};
+    void sendFileListToServer() {
+        System.out.println("in: sendFileListToServer");
 
-        String hostName = args[0];
-        int portNumber = Integer.parseInt(args[1]);
-
-        int counter = 0;
-        while (counter < 2) {
+        for (String name : fileNames) {
             try (Socket clientSocket = new Socket(hostName, portNumber)) {
-
 
                 DataOutputStream outToServer =
                         new DataOutputStream(clientSocket.getOutputStream());
 
-                for (; counter < testFilesSending.length; counter++) {
-                    outToServer.writeBytes(testFilesSending[counter]);
-
-                }
-//            outToServer.writeBytes(testFilesSending[0]);
-//            outToServer.writeBytes(testFilesSending[1]);
-//                outToServer.writeBytes(testFilesSending[2]);
+                outToServer.writeBytes(name);
 
             } catch (UnknownHostException e) {
                 System.err.println("Don't know about host " + hostName);
@@ -77,7 +75,19 @@ public class Client {
                         hostName);
                 System.exit(1);
             }
+
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        Client client = new Client("Wiktorias-MacBook-Pro.local", 10000);
+
+        String testFilesSending[] = {"Ala.jpg", "ma.png", "kota.mp3"};
+
+        String hostName = client.hostName;
+        int portNumber = client.portNumber;
+
 
     }
 }
