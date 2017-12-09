@@ -43,13 +43,13 @@ public class Menu {
         return code;
     }
 
-    int choseHost() {
+    private int choseHost() {
         System.out.println("Chose host which available files you wish to see");
         return 0;
     }
 
 
-    int getUserInput() {
+    private int getUserInput() {
         System.out.println("getUserInput()");
         int code = -1;
         Scanner scanner = ScannerCoordinator.getInstance().getScanner();
@@ -59,8 +59,6 @@ public class Menu {
         } catch (InputMismatchException e) {
             e.getStackTrace();
             System.out.println("Wrong input.");
-        } finally {
-//            scanner.close();
         }
         return code;
     }

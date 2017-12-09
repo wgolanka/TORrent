@@ -1,34 +1,22 @@
 package com.company;
 
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+
+import java.util.ArrayList;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Menu menu = new Menu();
+        Client client = new Client("Wiktorias-MacBook-Pro.local", 10000);
+        client.getFilesList();
 
+        Menu menu = new Menu();
         System.out.println("Welcome to TORent, what would you like to do?");
         int code = 0;
 
         menu.showWelcomeOptions();
         code = menu.getUserWelcomeChoice();
 
-
-//        while(true){
-//            Scanner scanner = new Scanner(System.in);
-//
-//            try{
-//                System.out.println("...");
-//                code = scanner.nextInt();
-//                System.out.println(code);
-//            }catch (Exception e){
-//                e.getStackTrace();
-//            }finally {
-//                scanner.close();
-//            }
-//        }
 
     }
 }
