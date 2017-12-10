@@ -9,6 +9,7 @@ public class Client {
 
     String hostName;
     int portNumber;
+    int instanceNumber;
     ArrayList<String> fileNames = new ArrayList<>();
 
     public Client(String hostName, int portNumber) {
@@ -18,7 +19,7 @@ public class Client {
 
     void getFilesList() {
 
-        String folderPath = "/Users/wgolanka/Documents/School/#3 semester/SKJ/Tor/TORrent_2";
+        String folderPath = "/Users/wgolanka/Documents/School/#3 semester/SKJ/Tor/TORrent_" + instanceNumber;
         File folder = new File(folderPath);
         File[] listOfFiles = folder.listFiles();
 
@@ -29,10 +30,6 @@ public class Client {
             String name = listOfFiles[i].getName();
             fileNames.add(name);
         }
-
-//        for(String s : fileNames){
-//            System.out.println(s);
-//        }
     }
 
     void sendServerCommandToListFiles() {
@@ -79,15 +76,57 @@ public class Client {
         }
     }
 
+    public void askServerAboutHosts() {
+        System.out.println("in: askServerAboutHosts");
+        try (Socket clientSocket = new Socket(hostName, portNumber)) {
+            System.out.println("client remoteSocketAddress " + clientSocket.getRemoteSocketAddress().toString());
+            Server.connectedHosts.put(instanceNumber, clientSocket.getRemoteSocketAddress());
+            DataOutputStream outToServer =
+                    new DataOutputStream(clientSocket.getOutputStream());
+
+            outToServer.writeBytes(Menu.HOSTLIST);
+
+        } catch (UnknownHostException e) {
+            System.err.println("Don't know about host " + hostName);
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for the connection to " +
+                    hostName);
+            System.exit(1);
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
         Client client = new Client("Wiktorias-MacBook-Pro.local", 10000);
-
-        String testFilesSending[] = {"Ala.jpg", "ma.png", "kota.mp3"};
+        client.instanceNumber = Integer.valueOf(args[0]);
 
         String hostName = client.hostName;
         int portNumber = client.portNumber;
+        try (Socket clientSocket = new Socket(hostName, portNumber)) {
+
+
+            BufferedReader inFromServer =
+                    new BufferedReader(new
+                            InputStreamReader(clientSocket.getInputStream()));
+
+
+            DataOutputStream outToServer =
+                    new DataOutputStream(clientSocket.getOutputStream());
+            outToServer.writeBytes(String.valueOf(client.instanceNumber));
+
+
+        } catch (UnknownHostException e) {
+            System.err.println("Don't know about host " + hostName);
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("Couldn't get I/O for the connection to " +
+                    hostName);
+            System.exit(1);
+        }
 
 
     }
+
+
 }

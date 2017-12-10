@@ -9,6 +9,7 @@ public class Menu {
     public final static String LIST = "LIST";
     public final static String PULL = "PULL";
     public final static String PUSH = "PUSH";
+    public final static String HOSTLIST = "HOSTLIST";
 
 
     void showWelcomeOptions() {

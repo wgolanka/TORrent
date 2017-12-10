@@ -2,6 +2,7 @@ package com.company;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
 
@@ -15,13 +16,14 @@ public class Main {
 
         menu.showWelcomeOptions();
         String code = menu.getUserWelcomeChoice();
-
+//        Server.connectedHosts = new HashMap<>();
         if (code.equals(Menu.LIST)) {
-            client.sendServerCommandToListFiles();
-            client.sendFileListToServer();
+            client.askServerAboutHosts();
+//            client.sendServerCommandToListFiles();
+//            client.sendFileListToServer();
         }
 
-//        TODO: Firstly I have to ask server about certain host files, then he ask this host to send the to him.
+//        TODO: Firstly I have to ask server about certain host files, then he ask this host to send them to him.
 
 
     }

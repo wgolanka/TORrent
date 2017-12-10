@@ -6,13 +6,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Server {
 
     static ArrayList<String> filesList;
-    int clientCounter = 0;
+    public static HashMap<Integer, SocketAddress> connectedHosts = new HashMap<>();
     int portNumber = 0;
+    static int counter = 0;
 
 
     public Server(int port) {
@@ -27,17 +30,11 @@ public class Server {
         return filesList;
     }
 
-    void setClientCount(int count) {
-        clientCounter = count;
-    }
-
-    int getClientsCount() {
-        return clientCounter;
-    }
-
     void checkClientCommand(String command, ServerSocket serverSocket) {
 
-        if (command.contains(Menu.LIST)) {
+        if (command.contains(Menu.HOSTLIST)) {
+            showConnectedHosts();
+        } else if (command.contains(Menu.LIST)) {
             System.out.println("command contains LIST");
             command = command.replace(Menu.LIST + " ", "");
             showHostFiles(Integer.valueOf(command), serverSocket);
@@ -70,33 +67,45 @@ public class Server {
         }
     }
 
+    static void showConnectedHosts() {
+        if (!(connectedHosts == null)) {
+            System.out.println(connectedHosts.entrySet());
+        } else {
+            System.out.println("connectedHost map is empty");
+        }
+
+    }
 
     public static void main(String[] args) throws IOException {
 
         Server server = new Server(10000);
-
         filesList = new ArrayList<>();
-        int portNumber = server.portNumber;
 
         try (ServerSocket serverSocket =
-                     new ServerSocket(portNumber)) {
+                     new ServerSocket(server.portNumber)) {
 
             while (true) {
                 Socket connectionSocket = serverSocket.accept();
-
-
+                System.out.println("Client accepted: " + connectionSocket.getRemoteSocketAddress().toString());
+                connectedHosts.put(counter++, connectionSocket.getRemoteSocketAddress());
                 BufferedReader inFromClient =
                         new BufferedReader(
                                 new InputStreamReader(
                                         connectionSocket.getInputStream())
                         );
-//                getFilesList(inFromClient.readLine());
-                server.checkClientCommand(inFromClient.readLine(), serverSocket);
+
+//                server.checkClientCommand(inFromClient.readLine(), serverSocket);
+                Socket clientSocket = serverSocket.accept();
+                Runnable connectionHandler = new ConnectionHandler(clientSocket);
+                new Thread(connectionHandler).start();
+//                DataOutputStream outToClient =
+//                        new DataOutputStream(connectionSocket.getOutputStream());
+//                connectionSocket.connect(connectedHosts.get(1));
             }
 
         } catch (IOException e) {
             System.out.println("Exception caught when trying to listen on port "
-                    + portNumber + " or listening for a connection");
+                    + server.portNumber + " or listening for a connection");
             System.out.println(e.getMessage());
         }
     }
