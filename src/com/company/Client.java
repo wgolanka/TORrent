@@ -93,19 +93,16 @@ public class Client {
 
     private void askServerAboutHosts() throws IOException {
 
-//        System.out.println("client remoteSocketAddress " + clientSocket.getRemoteSocketAddress().toString());
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
 
-        DataOutputStream outToServer =
-                new DataOutputStream(clientSocket.getOutputStream());
-
-        outToServer.writeBytes(Menu.HOSTLIST);
+        out.println(Menu.HOSTLIST);
     }
 
     public Socket openConnection() {
         try {
             if (clientSocket == null) {
                 System.out.println("Client: openConnection");
-
                 clientSocket = new Socket(hostName, portNumber);
             }
 

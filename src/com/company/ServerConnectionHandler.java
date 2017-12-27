@@ -21,10 +21,15 @@ public class ServerConnectionHandler implements Runnable {
             System.out.println("Client connected: " + clientSocket.getRemoteSocketAddress().toString());
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String nextLine;
-            System.out.println("connectionHandler before");
             while (true) {
                 if ((nextLine = in.readLine()) != null) {
-                    System.out.println(nextLine);
+                    System.out.println("ServerConnectionHandler: " + nextLine);
+
+                    switch (nextLine) {
+                        case Menu.HOSTLIST:
+                            ServerMain.sendHostList(clientSocket);
+                            break;
+                    }
                 }
 
             }

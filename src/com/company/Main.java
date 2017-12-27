@@ -16,16 +16,16 @@ public class Main {
         menu.showWelcomeOptions();
         String code = menu.getUserWelcomeChoice();
 
+        Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket);
+        new Thread(connectionHandler).start();
+
         if (code.equals(Menu.LIST)) {
             if (client.clientSocket != null) {
                 client.tryAskServerAboutHosts();
             } else {
                 System.out.println("clientSocket is null");
             }
-
         }
-
-//        TODO: Firstly I have to ask server about certain host files, then he ask this host to send them to him.
 
 
     }
