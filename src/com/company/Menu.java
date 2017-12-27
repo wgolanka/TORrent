@@ -16,7 +16,7 @@ public class Menu {
         System.out.println("Press 0 to " + EXIT +
                 "\nPress 1 to " + LIST + " files" +
                 "\nPress 2 to " + PULL + " file" +
-                "\nPress 3 to " + PUSH + "files");
+                "\nPress 3 to " + PUSH + " files");
     }
 
     String getUserWelcomeChoice() {

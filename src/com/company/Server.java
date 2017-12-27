@@ -1,6 +1,7 @@
 package com.company;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 import java.io.InputStreamReader;
@@ -87,20 +88,18 @@ public class Server {
             while (true) {
                 Socket connectionSocket = serverSocket.accept();
                 System.out.println("Client accepted: " + connectionSocket.getRemoteSocketAddress().toString());
-                connectedHosts.put(counter++, connectionSocket.getRemoteSocketAddress());
+
                 BufferedReader inFromClient =
                         new BufferedReader(
                                 new InputStreamReader(
                                         connectionSocket.getInputStream())
                         );
 
-//                server.checkClientCommand(inFromClient.readLine(), serverSocket);
-                Socket clientSocket = serverSocket.accept();
-                Runnable connectionHandler = new ConnectionHandler(clientSocket);
-                new Thread(connectionHandler).start();
+                System.out.println(inFromClient.readLine());
+//
 //                DataOutputStream outToClient =
 //                        new DataOutputStream(connectionSocket.getOutputStream());
-//                connectionSocket.connect(connectedHosts.get(1));
+
             }
 
         } catch (IOException e) {
