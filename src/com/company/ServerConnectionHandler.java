@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class ConnectionHandler implements Runnable {
+public class ServerConnectionHandler implements Runnable {
     private Socket clientSocket;
 
-    public ConnectionHandler(Socket clientSocket) {
+    public ServerConnectionHandler(Socket clientSocket) {
         this.clientSocket = clientSocket;
     }
 
     @Override
     public void run() {
         BufferedReader in;
-        System.out.println("ConnectionHandler: run");
+        System.out.println("ServerConnectionHandler: run");
 
         try {
             System.out.println("Client connected: " + clientSocket.getRemoteSocketAddress().toString());

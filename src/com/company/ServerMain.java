@@ -12,7 +12,7 @@ public class ServerMain {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                Runnable connectionHandler = new ConnectionHandler(clientSocket);
+                Runnable connectionHandler = new ServerConnectionHandler(clientSocket);
                 new Thread(connectionHandler).start();
 
             } catch (IOException e) {
