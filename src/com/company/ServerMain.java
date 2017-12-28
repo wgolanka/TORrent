@@ -24,6 +24,13 @@ public class ServerMain {
         }
     }
 
+    public static void askHostToSendFileList(Socket clientSocket) throws IOException {
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        out.println(Menu.LIST);
+    }
+
     public static void main(String[] args) throws IOException {
 
         ServerSocket serverSocket = new ServerSocket(10000);
@@ -42,4 +49,6 @@ public class ServerMain {
             }
         }
     }
+
+
 }

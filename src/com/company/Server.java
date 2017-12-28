@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class Server {
 
-    static ArrayList<String> filesList;
+    public static ArrayList<String> filesList;
     public static HashMap<Integer, SocketAddress> connectedHosts = new HashMap<>();
     int portNumber = 0;
     static int counter = 0;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class Client {
 
-    private ArrayList<String> fileNames = new ArrayList<>();
+    public ArrayList<String> fileNames = new ArrayList<>();
     private String hostName;
     private int portNumber;
     int instanceNumber;
@@ -72,26 +72,16 @@ public class Client {
     }
 
 
-    void sendFileListToServer() {
+    public void sendFileListToServer() throws IOException {
         System.out.println("in: sendFileListToServer");
 
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        toServer.println(Menu.LIST);
+
         for (String name : fileNames) {
-            try (Socket clientSocket = new Socket(hostName, portNumber)) {
-
-                DataOutputStream outToServer =
-                        new DataOutputStream(clientSocket.getOutputStream());
-
-                outToServer.writeBytes(name);
-
-            } catch (UnknownHostException e) {
-                System.err.println("Don't know about host " + hostName);
-                System.exit(1);
-            } catch (IOException e) {
-                System.err.println("Couldn't get I/O for the connection to " +
-                        hostName);
-                System.exit(1);
-            }
-
+            toServer.println(name);
         }
     }
 

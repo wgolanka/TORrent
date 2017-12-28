@@ -29,6 +29,9 @@ public class ServerConnectionHandler implements Runnable {
                         case Menu.HOSTLIST:
                             ServerMain.sendHostList(clientSocket);
                             break;
+                        case Menu.HOST:
+                            ServerMain.askHostToSendFileList(clientSocket);
+                            break;
                     }
                 }
 

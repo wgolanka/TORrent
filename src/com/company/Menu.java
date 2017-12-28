@@ -1,15 +1,19 @@
 package com.company;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
+
 
     public final String EXIT = "EXIT";
     public final static String LIST = "LIST";
     public final static String PULL = "PULL";
     public final static String PUSH = "PUSH";
     public final static String HOSTLIST = "HOSTLIST";
+    public final static String HOST = "HOST";
 
 
     void showWelcomeOptions() {
@@ -28,7 +32,7 @@ public class Menu {
                 code = EXIT;
                 break;
             case 1:
-                System.out.println("Listing files...");
+                System.out.println("Chose host which available files you wish to see");
                 code = LIST;
                 break;
             case 2:
@@ -47,13 +51,7 @@ public class Menu {
         return code;
     }
 
-    private int choseHost() {
-        System.out.println("Chose host which available files you wish to see");
-        return 0;
-    }
-
-
-    private int getUserInput() {
+    public int getUserInput() {
         System.out.println("Menu: getUserInput()");
         int code = -1;
         Scanner scanner = ScannerCoordinator.getInstance().getScanner();

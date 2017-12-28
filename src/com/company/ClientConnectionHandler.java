@@ -8,9 +8,11 @@ import java.net.Socket;
 public class ClientConnectionHandler implements Runnable {
 
     private Socket clientSocket;
+    private Client client;
 
-    public ClientConnectionHandler(Socket socket) {
+    public ClientConnectionHandler(Socket socket, Client client) {
         clientSocket = socket;
+        this.client = client;
     }
 
 
@@ -26,6 +28,11 @@ public class ClientConnectionHandler implements Runnable {
 
             while ((nextLine = in.readLine()) != null) {
                 System.out.println("ClientConnectionHandler: " + nextLine);
+                switch (nextLine) {
+                    case Menu.LIST:
+                        client.sendFileListToServer();
+                        break;
+                }
             }
 
         } catch (IOException e) {

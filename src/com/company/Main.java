@@ -16,7 +16,7 @@ public class Main {
         menu.showWelcomeOptions();
         String code = menu.getUserWelcomeChoice();
 
-        Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket);
+        Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket, client);
         new Thread(connectionHandler).start();
 
         if (code.equals(Menu.LIST)) {
