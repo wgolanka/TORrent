@@ -6,12 +6,12 @@ public class Main {
     public static void main(String[] args) {
 
         Client client = new Client("Wiktorias-MacBook-Pro.local", 10000);
-        client.instanceNumber = Integer.valueOf(args[0]);
+        Client.instanceNumber = Integer.valueOf(args[0]);
         client.clientSocket = client.openConnectionWithServer();
         client.getFilesList();
 
         Menu menu = new Menu();
-        System.out.println("Welcome host " + client.instanceNumber + " what would you like to do?");
+        System.out.println("Welcome host " + Client.instanceNumber + " what would you like to do?");
 
         Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket, client);
         new Thread(connectionHandler).start();

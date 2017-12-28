@@ -10,7 +10,7 @@ public class Client {
     public ArrayList<String> fileNames = new ArrayList<>();
     private String hostName;
     private int portNumber;
-    int instanceNumber;
+    static int instanceNumber;
     Socket clientSocket;
 
 
@@ -65,11 +65,11 @@ public class Client {
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        toServer.println(Menu.LIST);
-
         for (String name : fileNames) {
-            toServer.println(name);
+            toServer.println(Menu.LIST + "." + name);
         }
+
+        toServer.println(Menu.LIST);
     }
 
     public void tryAskServerAboutHosts() {
