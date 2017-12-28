@@ -54,7 +54,7 @@ public class Menu {
 
 
     private int getUserInput() {
-        System.out.println("getUserInput()");
+        System.out.println("Menu: getUserInput()");
         int code = -1;
         Scanner scanner = ScannerCoordinator.getInstance().getScanner();
         try {

@@ -7,7 +7,7 @@ public class Main {
 
         Client client = new Client("Wiktorias-MacBook-Pro.local", 10000);
         client.instanceNumber = Integer.valueOf(args[0]);
-        client.clientSocket = client.openConnection();
+        client.clientSocket = client.openConnectionWithServer();
         client.getFilesList();
 
         Menu menu = new Menu();
@@ -23,8 +23,10 @@ public class Main {
             if (client.clientSocket != null) {
                 client.tryAskServerAboutHosts();
             } else {
-                System.out.println("clientSocket is null");
+                System.err.println("Client.clientSocket is null");
             }
+
+
         }
 
 
