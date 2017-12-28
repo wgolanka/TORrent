@@ -22,14 +22,14 @@ public class Client {
     public Socket openConnectionWithServer() {
         try {
             if (clientSocket == null) {
-                System.out.println("Client: openConnectionWithServer");
+                System.out.println("    Client: openConnectionWithServer");
                 clientSocket = new Socket(hostName, portNumber);
             }
 
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + hostName);
+            System.err.println("D   on't know about host " + hostName);
         } catch (IOException e) {
-            System.err.println("Main Client: Couldn't get I/O for the connection to " +
+            System.err.println("    Main Client: Couldn't get I/O for the connection to " +
                     hostName);
         }
 
@@ -51,29 +51,16 @@ public class Client {
         }
     }
 
-    void sendServerCommandToListFiles() {
-        System.out.println("in: sendServerCommandToListFiles");
-        try (Socket clientSocket = new Socket(hostName, portNumber)) {
+    public void sendChosenHostNum(int userInput) throws IOException {
+        System.out.println("    Client: sendChosenHostNum");
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
 
-            DataOutputStream outToServer =
-                    new DataOutputStream(clientSocket.getOutputStream());
-
-            outToServer.writeBytes(Menu.LIST + " "
-                    + String.valueOf(fileNames.size()));
-
-        } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + hostName);
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for the connection to " +
-                    hostName);
-            System.exit(1);
-        }
+        toServer.println(Menu.HOST + "." + String.valueOf(userInput));
     }
 
-
     public void sendFileListToServer() throws IOException {
-        System.out.println("in: sendFileListToServer");
+        System.out.println("    Client: sendFileListToServer");
 
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
@@ -86,14 +73,14 @@ public class Client {
     }
 
     public void tryAskServerAboutHosts() {
-        System.out.println("in: tryAskServerAboutHosts");
+        System.out.println("    Client: tryAskServerAboutHosts");
         try {
             askServerAboutHosts();
         } catch (UnknownHostException e) {
-            System.err.println("Don't know about host " + hostName);
+            System.err.println("    Don't know about host " + hostName);
             System.exit(1);
         } catch (IOException e) {
-            System.err.println("Client: Couldn't get I/O for the connection to " +
+            System.err.println("    Client: Couldn't get I/O for the connection to " +
                     hostName);
             System.exit(1);
         }

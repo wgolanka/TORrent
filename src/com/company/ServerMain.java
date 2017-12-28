@@ -14,14 +14,15 @@ public class ServerMain {
 
 
     public static void sendHostList(Socket clientSocket) throws IOException {
-        int counter = 1;
+        int counter = 0;
+
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
         for (Socket socket : sockets) {
-
-            PrintWriter out =
-                    new PrintWriter(clientSocket.getOutputStream(), true);
-
             out.println(counter++ + ". " + socket.getRemoteSocketAddress());
         }
+        out.println(Menu.HOSTLIST);
     }
 
     public static void askHostToSendFileList(Socket clientSocket) throws IOException {
@@ -49,6 +50,4 @@ public class ServerMain {
             }
         }
     }
-
-
 }

@@ -13,19 +13,21 @@ public class Main {
         Menu menu = new Menu();
         System.out.println("Welcome host " + client.instanceNumber + " what would you like to do?");
 
-        menu.showWelcomeOptions();
-        String code = menu.getUserWelcomeChoice();
-
         Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket, client);
         new Thread(connectionHandler).start();
 
+        menu.showWelcomeOptions();
+        String code = menu.getUserWelcomeChoice();
+
+
         if (code.equals(Menu.LIST)) {
+            System.out.println("    Menu: LIST chosen");
             if (client.clientSocket != null) {
+                System.out.println("    Menu: asking server about host list");
                 client.tryAskServerAboutHosts();
             } else {
-                System.err.println("Client.clientSocket is null");
+                System.err.println("    Client.clientSocket is null");
             }
-
 
         }
 

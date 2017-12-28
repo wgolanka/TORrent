@@ -51,16 +51,16 @@ public class Menu {
         return code;
     }
 
-    public int getUserInput() {
-        System.out.println("Menu: getUserInput()");
+    public static int getUserInput() {
+        System.out.println("    Menu: getUserInput()");
         int code = -1;
         Scanner scanner = ScannerCoordinator.getInstance().getScanner();
         try {
             code = scanner.nextInt();
-            System.out.println("code: " + code);
+            System.out.println("    code: " + code);
         } catch (InputMismatchException e) {
             e.getStackTrace();
-            System.out.println("Wrong input.");
+            System.out.println("    Wrong input.");
         }
         return code;
     }

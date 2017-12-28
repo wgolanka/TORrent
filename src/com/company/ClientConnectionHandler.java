@@ -19,17 +19,27 @@ public class ClientConnectionHandler implements Runnable {
     @Override
     public void run() {
         BufferedReader in;
-        System.out.println("Client connectionHandler: run");
+        System.out.println("    ClientConnectionHandler: run");
 
         try {
-            System.out.println("Client being handled: " + clientSocket.getRemoteSocketAddress().toString());
+            System.out.println("    Client being handled: " + clientSocket.getRemoteSocketAddress().toString());
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String nextLine;
 
             while ((nextLine = in.readLine()) != null) {
-                System.out.println("ClientConnectionHandler: " + nextLine);
+                System.out.println("    ClientConnectionHandler: nextLine ");
+
+                if (!nextLine.equals(Menu.HOSTLIST)) {
+                    System.out.println(nextLine);
+                }
+
                 switch (nextLine) {
+                    case Menu.HOSTLIST:
+                        System.out.println("    ClientConnectionHandler: switch HOSTLIST");
+                        client.sendChosenHostNum(Menu.getUserInput());
+                        break;
                     case Menu.LIST:
+                        System.out.println("    ClientConnectionHandler: switch LIST");
                         client.sendFileListToServer();
                         break;
                 }
