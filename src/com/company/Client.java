@@ -24,6 +24,7 @@ public class Client {
             if (clientSocket == null) {
                 System.out.println("    Client: openConnectionWithServer");
                 clientSocket = new Socket(hostName, portNumber);
+                sendServerMyInstanceNumber();
             }
 
         } catch (UnknownHostException e) {
@@ -95,4 +96,11 @@ public class Client {
     }
 
 
+    private void sendServerMyInstanceNumber() throws IOException {
+        System.out.println("    Client: Sending instance number to server");
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        toServer.println(instanceNumber);
+    }
 }

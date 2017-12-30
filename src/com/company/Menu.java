@@ -14,6 +14,7 @@ public class Menu {
     public final static String PUSH = "PUSH";
     public final static String HOSTLIST = "HOSTLIST";
     public final static String HOST = "HOST";
+    public final static String FINISHED = "FINISHED";
 
 
     void showWelcomeOptions() {

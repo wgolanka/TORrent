@@ -39,8 +39,12 @@ public class ClientConnectionHandler implements Runnable {
                         client.sendChosenHostNum(Menu.getUserInput());
                         break;
                     case Menu.LIST:
+                        System.out.println("    ClientConnectionHandler: Server ask to send my file list");
                         System.out.println("    ClientConnectionHandler: switch LIST");
                         client.sendFileListToServer();
+                        break;
+                    case Menu.FINISHED:
+                        Main.welcomeChoice(client);
                         break;
                 }
             }

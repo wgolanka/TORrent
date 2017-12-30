@@ -10,15 +10,19 @@ public class Main {
         client.clientSocket = client.openConnectionWithServer();
         client.getFilesList();
 
-        Menu menu = new Menu();
         System.out.println("Welcome host " + Client.instanceNumber + " what would you like to do?");
 
         Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket, client);
         new Thread(connectionHandler).start();
 
+        welcomeChoice(client);
+    }
+
+    public static void welcomeChoice(Client client) {
+        Menu menu = new Menu();
+
         menu.showWelcomeOptions();
         String code = menu.getUserWelcomeChoice();
-
 
         if (code.equals(Menu.LIST)) {
             System.out.println("    Menu: LIST chosen");
@@ -28,9 +32,6 @@ public class Main {
             } else {
                 System.err.println("    Client.clientSocket is null");
             }
-
         }
-
-
     }
 }
