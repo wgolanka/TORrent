@@ -10,6 +10,7 @@ public class ServerConnectionHandler implements Runnable {
     private Socket clientSocket;
     private int clientInstance;
     public static ArrayList<String> filesNames = new ArrayList<>();
+    private final String TAG = "    ServerConnectionHandler: ";
 
     public ServerConnectionHandler(Socket clientSocket, int clientInstance) {
         this.clientSocket = clientSocket;
@@ -19,7 +20,7 @@ public class ServerConnectionHandler implements Runnable {
     @Override
     public void run() {
         BufferedReader in;
-        System.out.println("    ServerConnectionHandler: run " + clientInstance);
+        System.out.println(TAG + "run " + clientInstance);
 
         try {
             System.out.println("    Client connected: " + clientSocket.getRemoteSocketAddress().toString() + " " + clientInstance);
@@ -28,11 +29,11 @@ public class ServerConnectionHandler implements Runnable {
 
             while (true) {
                 if ((nextLine = in.readLine()) != null) {
-                    System.out.println("    ServerConnectionHandler: " + nextLine);
+                    System.out.println(TAG + nextLine);
 
                     if (nextLine.contains(Menu.HOST + ".")) {
                         int chosenHost = Integer.valueOf(nextLine.substring(5));
-                        System.out.println("    ServerConnectionHandler: " + chosenHost + ". " + Server.sockets.get(chosenHost).getRemoteSocketAddress());
+                        System.out.println(TAG + chosenHost + ". " + Server.sockets.get(chosenHost).getRemoteSocketAddress());
 
                         Server.askHostToSendFileList(Server.sockets.get(chosenHost));
 
@@ -42,28 +43,27 @@ public class ServerConnectionHandler implements Runnable {
 
                     switch (nextLine) {
                         case Menu.HOSTLIST:
-                            System.out.println("    ServerConnectionHandler: Switch HOSTLIST ");
-                            System.out.println("    ServerConnectionHandler: Send host list to " + clientInstance + " host");
+                            System.out.println(TAG + "Switch HOSTLIST ");
+                            System.out.println(TAG + "Send host list to " + clientInstance + " host");
                             Server.sendHostList(clientSocket);
                             break;
                         case Menu.LIST:
-                            System.out.println("    ServerConnectionHandler: Switch LIST");
+                            System.out.println(TAG + "Switch LIST");
                             if (!filesNames.isEmpty()) {
                                 if (Server.sockets.containsKey(clientInstance)) {
-                                    System.out.println("    ServerConnectionHandler: SendFileList to " + clientInstance + ". " +
+                                    System.out.println(TAG + "SendFileList to " + clientInstance + ". " +
                                             Server.sockets.get(clientInstance).getRemoteSocketAddress());
                                     Server.sendFileList(Server.sockets.get(clientInstance));
                                 } else {
                                     System.err.println("    askingSocket is null");
                                 }
                             } else {
-                                System.err.println("    ServerConnectionHandler: filesNames list is empty");
+                                System.err.println(TAG + "filesNames list is empty");
                             }
 
                             break;
                     }
                 }
-
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -28,7 +28,7 @@ public class Client {
             }
 
         } catch (UnknownHostException e) {
-            System.err.println("D   on't know about host " + hostName);
+            System.err.println("Don't know about host " + hostName);
         } catch (IOException e) {
             System.err.println("    Main Client: Couldn't get I/O for the connection to " +
                     hostName);
