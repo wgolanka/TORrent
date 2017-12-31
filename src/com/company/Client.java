@@ -10,7 +10,7 @@ public class Client {
     public ArrayList<String> fileNames = new ArrayList<>();
     private String hostName;
     private int portNumber;
-    static int instanceNumber;
+    static String instanceNumber;
     Socket clientSocket;
 
 
@@ -52,25 +52,25 @@ public class Client {
         }
     }
 
-    public void sendChosenHostNum(int userInput) throws IOException {
+    public void sendChosenHostNum(String askingClient, int userInput) throws IOException { // TU OK
         System.out.println("    Client: sendChosenHostNum");
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        toServer.println(Menu.HOST + "." + String.valueOf(userInput));
+        toServer.println(askingClient + Menu.HOST + userInput);
     }
 
-    public void sendFileListToServer() throws IOException {
+    public void sendFileListToServer(String askingClient) throws IOException {
         System.out.println("    Client: sendFileListToServer");
 
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
         for (String name : fileNames) {
-            toServer.println(Menu.LIST + "." + name);
+            toServer.println(askingClient + Menu.LIST + "." + name);
         }
 
-        toServer.println(Menu.LIST);
+//        toServer.println(askingClient + Menu.LIST);
     }
 
     public void tryAskServerAboutHosts() {
@@ -87,12 +87,12 @@ public class Client {
         }
     }
 
-    private void askServerAboutHosts() throws IOException {
+    private void askServerAboutHosts() throws IOException { // TU OK
 
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        toServer.println(Menu.HOSTLIST);
+        toServer.println(instanceNumber + Menu.CLIENTS);
     }
 
 

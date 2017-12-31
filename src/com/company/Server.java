@@ -1,13 +1,11 @@
 package com.company;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,35 +14,22 @@ public class Server {
     static HashMap<Integer, Socket> sockets;
 
 
-    public static void sendHostList(Socket clientSocket) throws IOException {
+    public static void sendHostList(String askingClientInstance, Socket clientSocket) throws IOException { // TO JEST OK
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
         for (Map.Entry<Integer, Socket> entry : sockets.entrySet()) {
             out.println(entry.getKey() + ". " + entry.getValue().getRemoteSocketAddress());
         }
-        out.println(Menu.HOSTLIST);
+        out.println(askingClientInstance + Menu.CLIENTS);
     }
 
-    public static void askHostToSendFileList(Socket clientSocket) throws IOException {
+    public static void askHostToSendFileList(String askingClient, Socket clientSocket) throws IOException { // TU OK
         System.out.println("    Server: askHostToSendFileList");
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        out.println(Menu.LIST);
-    }
-
-    public static void sendFileList(Socket clientSocket) throws IOException {
-        PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);
-
-        for (String fileName : ServerConnectionHandler.filesNames) {
-            out.println(fileName);
-        }
-
-        ServerConnectionHandler.filesNames.clear();
-        out.println(Menu.FINISHED);
-
+        out.println(askingClient + Menu.LIST);
     }
 
     public static void main(String[] args) throws IOException {
@@ -64,7 +49,7 @@ public class Server {
 
                     sockets.put(Integer.valueOf(input), clientSocket);
 
-                    Runnable connectionHandler = new ServerConnectionHandler(clientSocket, Integer.valueOf(input));
+                    Runnable connectionHandler = new ServerConnectionHandler(clientSocket, input);
                     new Thread(connectionHandler).start();
                 }
             } catch (IOException e) {
@@ -73,5 +58,11 @@ public class Server {
         }
     }
 
+    public static void sendFileName(String fileName, Socket clientSocket) throws IOException {
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+        out.println(fileName);
 
+//        out.println(Menu.FINISHED); TODO add finishing command
+    }
 }

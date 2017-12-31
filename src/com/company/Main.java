@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         Client client = new Client("Wiktorias-MacBook-Pro.local", 10000);
-        Client.instanceNumber = Integer.valueOf(args[0]);
+        Client.instanceNumber = args[0];
         client.clientSocket = client.openConnectionWithServer();
         client.getFilesList();
 
