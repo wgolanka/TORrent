@@ -1,8 +1,15 @@
 package com.company;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 public class Client {
@@ -12,7 +19,9 @@ public class Client {
 
     private static final String TAG = "    Client: ";
     private String hostName;
+    static String filesPath;
     static String instanceNumber;
+
 
     private int portNumber;
 
@@ -94,14 +103,45 @@ public class Client {
 
     public void sendFileListToServer(String askingClient) throws IOException {
         System.out.println(TAG + "sendFileListToServer");
+        
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        for (String name : fileNames) {
-            toServer.println(askingClient + Menu.LIST + "." + name);
+        final File folder = new File(filesPath);
+        for (final File fileEntry : folder.listFiles()) {
+            if (!fileEntry.isDirectory()) {
+                toServer.println(askingClient + Menu.LIST + "." + fileEntry.getName() +
+                        " MD5: " + addMD5(fileEntry));
+            }
         }
 
         toServer.println(askingClient + Menu.FINISHED);
+    }
+
+    private StringBuffer addMD5(File fileEntry) {
+
+        StringBuffer stringBuffer = new StringBuffer();
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("MD5");
+
+            InputStream is = Files.newInputStream(fileEntry.toPath());
+            DigestInputStream dis = new DigestInputStream(is, md);
+
+            while (dis.read() != -1) ;
+
+            byte[] digest = md.digest();
+            for (byte b : digest) {
+                stringBuffer.append(String.format("%02x", b));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return stringBuffer;
     }
 
     public void startAgain() { // TODO it is probably launched on thread and shouldn't be.

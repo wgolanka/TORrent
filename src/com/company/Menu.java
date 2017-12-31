@@ -1,10 +1,5 @@
 package com.company;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -60,16 +55,11 @@ public class Menu {
         int code = -1;
 
 //        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-
         Scanner scanner = ScannerCoordinator.getInstance().getScanner();
+
         try {
+
 //            code = Integer.parseInt(br.readLine());
-
-//            if(scanner.hasNext()){
-//                code = scanner.nextInt();
-//            }
-
             code = scanner.nextInt();
 
             System.out.println("    code: " + code);

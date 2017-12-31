@@ -7,6 +7,7 @@ public class Main {
 
         Client client = new Client("Wiktorias-MacBook-Pro.local", 10000);
         Client.instanceNumber = args[0];
+        Client.filesPath = "/Users/wgolanka/Documents/School/#3 semester/SKJ/Tor/TORrent_" + Client.instanceNumber;
         client.clientSocket = client.openConnectionWithServer();
         client.getFilesList();
 
@@ -14,7 +15,7 @@ public class Main {
 
         Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket, client);
         new Thread(connectionHandler).start();
-        
+
         welcomeChoice(client);
     }
 

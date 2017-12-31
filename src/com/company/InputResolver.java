@@ -2,7 +2,6 @@ package com.company;
 
 public class InputResolver {
 
-
     // In this protocol the first sign of String is an instance number of asking client.
     public static String getClientInstance(String fromClient) {
         return fromClient.substring(0, 1);
