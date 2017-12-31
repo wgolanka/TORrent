@@ -44,14 +44,14 @@ public class ClientConnectionHandler implements Runnable {
 
             while (true) {
                 if ((nextLine = in.readLine()) != null) {
-                    System.out.print(TAG + "nextLine is");
+                    System.out.println(TAG + "nextLine is");
 
                     if (nextLine.contains(Menu.CLIENTS)) {
                         sendChosenHostNumber(nextLine);
                     } else if (nextLine.contains(Menu.LIST)) {
                         sendFileNamesToServer(nextLine);
                     } else if (nextLine.contains(Menu.FINISHED)) {
-                        Main.welcomeChoice(client);
+                        client.startAgain();
                     } else {
                         System.out.println(nextLine);
                     }

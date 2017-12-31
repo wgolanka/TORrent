@@ -14,15 +14,14 @@ public class Main {
 
         Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket, client);
         new Thread(connectionHandler).start();
-
+        
         welcomeChoice(client);
     }
 
     public static void welcomeChoice(Client client) {
-        Menu menu = new Menu();
 
-        menu.showWelcomeOptions();
-        String code = menu.getUserWelcomeChoice();
+        Menu.showWelcomeOptions();
+        String code = Menu.getUserWelcomeChoice();
 
         if (code.equals(Menu.LIST)) {
             System.out.println("    Menu: LIST chosen");

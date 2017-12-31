@@ -18,7 +18,7 @@ public class ServerConnectionHandler implements Runnable {
     }
 
     private void sendHostList(String fromClient) throws IOException {
-        clientInstance = fromClient.substring(0, 1);
+        clientInstance = InputResolver.getClientInstance(fromClient);
         System.out.println(TAG + "Send host list to " + clientInstance + " host");
         Server.sendHostList(clientInstance, clientSocket);
     }
@@ -26,8 +26,8 @@ public class ServerConnectionHandler implements Runnable {
     private void askHostToSendFileNames(String fromClient) throws IOException {
 
         System.out.println(TAG + "HOST: " + fromClient);
-        int chosenHost = Integer.valueOf(fromClient.substring(5));
-        clientInstance = fromClient.substring(0, 1);
+        int chosenHost = InputResolver.getChosenHostNumber(fromClient);
+        clientInstance = InputResolver.getClientInstance(fromClient);
         System.out.println(TAG + chosenHost + ". " + Server.sockets.get(chosenHost).getRemoteSocketAddress());
 
         Server.askHostToSendFileNames(clientInstance, Server.sockets.get(chosenHost));
@@ -35,7 +35,7 @@ public class ServerConnectionHandler implements Runnable {
 
     private void sendFileName(String fromClient) throws IOException {
 
-        clientInstance = fromClient.substring(0, 1);
+        clientInstance = InputResolver.getClientInstance(fromClient);
         int clientNumber = Integer.valueOf(clientInstance);
 
         if (Server.sockets.containsKey(clientNumber)) {
@@ -43,7 +43,7 @@ public class ServerConnectionHandler implements Runnable {
             System.out.println(TAG + "sendFileList to " + clientInstance + ". " +
                     Server.sockets.get(clientNumber).getRemoteSocketAddress());
 
-            Server.sendFileName(fromClient.substring(6), Server.sockets.get(clientNumber));
+            Server.sendFileName(InputResolver.getFileName(fromClient), Server.sockets.get(clientNumber));
 
         } else {
             System.err.println("    askingSocket is null");
@@ -74,7 +74,7 @@ public class ServerConnectionHandler implements Runnable {
                         sendFileName(nextLine);
                     } else if (nextLine.contains(Menu.FINISHED)) {
                         Server.sendFinishCommand(Server.sockets.get(
-                                Integer.valueOf(nextLine.substring(0, 1))));
+                                InputResolver.getClientInstanceInt(nextLine)));
                     }
                 }
             }

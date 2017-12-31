@@ -1,5 +1,8 @@
 package com.company;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.InputMismatchException;
@@ -8,7 +11,7 @@ import java.util.Scanner;
 public class Menu {
 
 
-    public final String EXIT = "EXIT";
+    public final static String EXIT = "EXIT";
     public final static String LIST = "LIST";
     public final static String PULL = "PULL";
     public final static String PUSH = "PUSH";
@@ -17,14 +20,14 @@ public class Menu {
     public final static String FINISHED = "FINISHED";
 
 
-    void showWelcomeOptions() {
+    static void showWelcomeOptions() {
         System.out.println("Press 0 to " + EXIT +
                 "\nPress 1 to " + LIST + " files" +
                 "\nPress 2 to " + PULL + " file" +
                 "\nPress 3 to " + PUSH + " files");
     }
 
-    String getUserWelcomeChoice() {
+    static String getUserWelcomeChoice() {
         String code = EXIT;
 
         switch (getUserInput()) {
@@ -55,10 +58,22 @@ public class Menu {
     public static int getUserInput() {
         System.out.println("    Menu: getUserInput()");
         int code = -1;
+
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+
         Scanner scanner = ScannerCoordinator.getInstance().getScanner();
         try {
+//            code = Integer.parseInt(br.readLine());
+
+//            if(scanner.hasNext()){
+//                code = scanner.nextInt();
+//            }
+
             code = scanner.nextInt();
+
             System.out.println("    code: " + code);
+
         } catch (InputMismatchException e) {
             e.getStackTrace();
             System.out.println("    Wrong input.");

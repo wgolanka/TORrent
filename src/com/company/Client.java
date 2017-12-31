@@ -6,15 +6,15 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Client {
+    Socket clientSocket;
 
     private ArrayList<String> fileNames = new ArrayList<>();
+
     private static final String TAG = "    Client: ";
     private String hostName;
     static String instanceNumber;
 
     private int portNumber;
-
-    Socket clientSocket;
 
     public Client(String hostName, int portNumber) {
         this.hostName = hostName;
@@ -102,5 +102,9 @@ public class Client {
         }
 
         toServer.println(askingClient + Menu.FINISHED);
+    }
+
+    public void startAgain() { // TODO it is probably launched on thread and shouldn't be.
+        Main.welcomeChoice(this);
     }
 }
