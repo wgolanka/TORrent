@@ -12,9 +12,12 @@ import java.util.Map;
 public class Server {
 
     static HashMap<Integer, Socket> sockets;
+    private static final String TAG = "    Server: ";
 
 
-    public static void sendHostList(String askingClientInstance, Socket clientSocket) throws IOException { // TO JEST OK
+    public static void sendHostList(String askingClientInstance, Socket clientSocket) throws IOException {
+        System.out.println(TAG + "sendHostList");
+
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
@@ -24,12 +27,26 @@ public class Server {
         out.println(askingClientInstance + Menu.CLIENTS);
     }
 
-    public static void askHostToSendFileList(String askingClient, Socket clientSocket) throws IOException { // TU OK
-        System.out.println("    Server: askHostToSendFileList");
+    public static void askHostToSendFileNames(String askingClient, Socket clientSocket) throws IOException {
+        System.out.println(TAG + "askHostToSendFileNames");
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
         out.println(askingClient + Menu.LIST);
+    }
+
+    public static void sendFileName(String fileName, Socket clientSocket) throws IOException {
+        System.out.println(TAG + "SendFileName");
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+        out.println(fileName);
+    }
+
+    public static void sendFinishCommand(Socket clientSocket) throws IOException {
+        System.out.println(TAG + "sendFinishCommand");
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+        out.println(Menu.FINISHED);
     }
 
     public static void main(String[] args) throws IOException {
@@ -42,10 +59,10 @@ public class Server {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-
                 fromClient = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
                 if ((input = fromClient.readLine()) != null) {
-                    System.out.println("    connecting to " + clientSocket.getRemoteSocketAddress().toString() + " : " + input);
+                    System.out.println(TAG + "connecting to " + clientSocket.getRemoteSocketAddress().toString() + " : " + input);
 
                     sockets.put(Integer.valueOf(input), clientSocket);
 
@@ -58,11 +75,5 @@ public class Server {
         }
     }
 
-    public static void sendFileName(String fileName, Socket clientSocket) throws IOException {
-        PrintWriter out =
-                new PrintWriter(clientSocket.getOutputStream(), true);
-        out.println(fileName);
 
-//        out.println(Menu.FINISHED); TODO add finishing command
-    }
 }
