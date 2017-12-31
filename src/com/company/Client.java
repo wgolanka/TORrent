@@ -7,12 +7,14 @@ import java.util.ArrayList;
 
 public class Client {
 
-    public ArrayList<String> fileNames = new ArrayList<>();
+    private ArrayList<String> fileNames = new ArrayList<>();
+    private static final String TAG = "    Client: ";
     private String hostName;
-    private int portNumber;
     static String instanceNumber;
-    Socket clientSocket;
 
+    private int portNumber;
+
+    Socket clientSocket;
 
     public Client(String hostName, int portNumber) {
         this.hostName = hostName;
@@ -22,7 +24,7 @@ public class Client {
     public Socket openConnectionWithServer() {
         try {
             if (clientSocket == null) {
-                System.out.println("    Client: openConnectionWithServer");
+                System.out.println(TAG + "openConnectionWithServer");
                 clientSocket = new Socket(hostName, portNumber);
                 sendServerMyInstanceNumber();
             }
@@ -30,15 +32,22 @@ public class Client {
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + hostName);
         } catch (IOException e) {
-            System.err.println("    Main Client: Couldn't get I/O for the connection to " +
+            System.err.println("Main Client: Couldn't get I/O for the connection to " +
                     hostName);
         }
-
         return clientSocket;
     }
 
-    void getFilesList() {
+    private void sendServerMyInstanceNumber() throws IOException {
+        System.out.println(TAG + "sendServerMyInstanceNumber");
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
 
+        toServer.println(instanceNumber);
+    }
+
+    void getFilesList() {
+        System.out.println(TAG + "getFileList");
         String folderPath = "/Users/wgolanka/Documents/School/#3 semester/SKJ/Tor/TORrent_" + instanceNumber;
         File folder = new File(folderPath);
         File[] listOfFiles = folder.listFiles();
@@ -52,29 +61,9 @@ public class Client {
         }
     }
 
-    public void sendChosenHostNum(String askingClient, int userInput) throws IOException { // TU OK
-        System.out.println("    Client: sendChosenHostNum");
-        PrintWriter toServer =
-                new PrintWriter(clientSocket.getOutputStream(), true);
-
-        toServer.println(askingClient + Menu.HOST + userInput);
-    }
-
-    public void sendFileListToServer(String askingClient) throws IOException {
-        System.out.println("    Client: sendFileListToServer");
-
-        PrintWriter toServer =
-                new PrintWriter(clientSocket.getOutputStream(), true);
-
-        for (String name : fileNames) {
-            toServer.println(askingClient + Menu.LIST + "." + name);
-        }
-
-//        toServer.println(askingClient + Menu.LIST);
-    }
-
     public void tryAskServerAboutHosts() {
-        System.out.println("    Client: tryAskServerAboutHosts");
+        System.out.println(TAG + "tryAskServerAboutHosts");
+
         try {
             askServerAboutHosts();
         } catch (UnknownHostException e) {
@@ -88,19 +77,30 @@ public class Client {
     }
 
     private void askServerAboutHosts() throws IOException { // TU OK
-
+        System.out.println(TAG + "askServerAboutHosts");
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
         toServer.println(instanceNumber + Menu.CLIENTS);
     }
 
-
-    private void sendServerMyInstanceNumber() throws IOException {
-        System.out.println("    Client: Sending instance number to server");
+    public void sendChosenHostNum(String askingClient, int userInput) throws IOException {
+        System.out.println(TAG + "sendChosenHostNum");
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        toServer.println(instanceNumber);
+        toServer.println(askingClient + Menu.HOST + userInput);
+    }
+
+    public void sendFileListToServer(String askingClient) throws IOException {
+        System.out.println(TAG + "sendFileListToServer");
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        for (String name : fileNames) {
+            toServer.println(askingClient + Menu.LIST + "." + name);
+        }
+
+        toServer.println(askingClient + Menu.FINISHED);
     }
 }

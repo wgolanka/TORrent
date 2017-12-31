@@ -8,7 +8,9 @@ import java.net.Socket;
 public class ClientConnectionHandler implements Runnable {
 
     private Socket clientSocket;
+
     private Client client;
+
     private final String TAG = "    ClientConnectionHandler: ";
     private String askingClient;
 
@@ -17,6 +19,18 @@ public class ClientConnectionHandler implements Runnable {
         this.client = client;
     }
 
+    private void sendChosenHostNumber(String fromServer) throws IOException {
+        System.out.println(TAG + "Server asked to chose host");
+        int userInput = Menu.getUserInput();
+        askingClient = fromServer.substring(0, 1);
+        client.sendChosenHostNum(askingClient, userInput);
+    }
+
+    private void sendFileNamesToServer(String fromServer) throws IOException {
+        System.out.println(TAG + "Server asked to send my file list");
+        askingClient = fromServer.substring(0, 1);
+        client.sendFileListToServer(askingClient);
+    }
 
     @Override
     public void run() {
@@ -30,34 +44,21 @@ public class ClientConnectionHandler implements Runnable {
 
             while (true) {
                 if ((nextLine = in.readLine()) != null) {
-                    System.out.println(TAG + "nextLine ");
+                    System.out.print(TAG + "nextLine is");
 
-                    if (nextLine.contains(Menu.CLIENTS)) { // TO JEST OK
-                        System.out.println(TAG + "Server asked to chose host");
-                        int userInput = Menu.getUserInput();
-                        askingClient = nextLine.substring(0, 1);
-                        client.sendChosenHostNum(askingClient, userInput);
-                    } else if (nextLine.contains(Menu.LIST)) { // TU OK
-                        System.out.println(TAG + "Server asked to send my file list");
-                        askingClient = nextLine.substring(0, 1);
-                        client.sendFileListToServer(askingClient);
+                    if (nextLine.contains(Menu.CLIENTS)) {
+                        sendChosenHostNumber(nextLine);
+                    } else if (nextLine.contains(Menu.LIST)) {
+                        sendFileNamesToServer(nextLine);
+                    } else if (nextLine.contains(Menu.FINISHED)) {
+                        Main.welcomeChoice(client);
                     } else {
                         System.out.println(nextLine);
                     }
-
-                    switch (nextLine) {
-                        case Menu.FINISHED:
-                            Main.welcomeChoice(client);
-                            break;
-                    }
-                } else {
-                    System.out.println("GOWNO DUPA");
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
