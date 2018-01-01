@@ -17,7 +17,7 @@ public class Client {
     private static final String TAG = "    Client: ";
     private String hostName;
     String filesPath;
-    static String instanceNumber;
+    static String instance;
 
 
     private int portNumber;
@@ -49,7 +49,7 @@ public class Client {
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        toServer.println(instanceNumber);
+        toServer.println(instance);
     }
 
     public void tryAskServerAboutHosts() {
@@ -72,7 +72,7 @@ public class Client {
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        toServer.println(instanceNumber + Menu.CLIENTS);
+        toServer.println(instance + Menu.CLIENTS);
     }
 
     public void sendChosenHostNum(String askingClient, int userInput) throws IOException {
@@ -126,7 +126,12 @@ public class Client {
         return stringBuffer;
     }
 
-    public void finishConnection() {
-        
+    public void finishConnection(String askingClient) throws IOException {
+
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        toServer.println(askingClient + Menu.EXIT);
+        System.out.println(TAG + "send server info about exit");
     }
 }

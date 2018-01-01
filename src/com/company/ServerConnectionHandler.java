@@ -28,9 +28,15 @@ public class ServerConnectionHandler implements Runnable {
         System.out.println(TAG + "HOST: " + fromClient);
         int chosenHost = InputResolver.getChosenHostNumber(fromClient);
         clientInstance = InputResolver.getClientInstance(fromClient);
-        System.out.println(TAG + chosenHost + ". " + Server.sockets.get(chosenHost).getRemoteSocketAddress());
 
-        Server.askHostToSendFileNames(clientInstance, Server.sockets.get(chosenHost));
+        if (Server.sockets.containsKey(chosenHost)) {
+            System.out.println(TAG + chosenHost + ". " + Server.sockets.get(chosenHost).getRemoteSocketAddress());
+            Server.askHostToSendFileNames(clientInstance, Server.sockets.get(chosenHost));
+        } else {
+            Server.askHostToChoseDifferentHost(Server.sockets.get(
+                    InputResolver.getClientInstanceInt(fromClient)));
+            sendHostList(fromClient);
+        }
     }
 
     private void sendFileName(String fromClient) throws IOException {
@@ -75,6 +81,9 @@ public class ServerConnectionHandler implements Runnable {
                     } else if (nextLine.contains(Menu.FINISHED)) {
                         Server.sendFinishCommand(Server.sockets.get(
                                 InputResolver.getClientInstanceInt(nextLine)));
+                    } else if (nextLine.contains(Menu.EXIT)) {
+                        System.out.println(TAG + " deleting " + InputResolver.getClientInstance(nextLine));
+                        Server.sockets.remove(InputResolver.getClientInstanceInt(nextLine));
                     }
                 }
             }

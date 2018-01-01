@@ -39,14 +39,8 @@ public class ClientConnectionHandler implements Runnable {
                 if ((nextLine = in.readLine()) != null) {
                     System.out.println(TAG + "nextLine is");
 
-                    if (nextLine.contains(Menu.CLIENTS)) {
-//                       Client.activateUserInput(client);
-                        System.out.println(TAG + "Clients");
-                        Main.ready = true;
-                    } else if (nextLine.contains(Menu.LIST)) {
+                    if (nextLine.contains(Menu.LIST)) {
                         sendFileNamesToServer(nextLine);
-                    } else if (nextLine.contains(Menu.FINISHED)) {
-                        client.startAgain();
                     } else {
                         System.out.println(nextLine);
                     }

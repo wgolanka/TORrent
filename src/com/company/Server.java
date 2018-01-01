@@ -28,6 +28,14 @@ public class Server {
         System.out.println("Sending CLIENTS LIST finished");
     }
 
+    public static void askHostToChoseDifferentHost(Socket clientSocket) throws IOException {
+        System.out.println(TAG + "askHostToChoseDifferentHost");
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        out.println("Please chose different host, last one is not available");
+    }
+
     public static void askHostToSendFileNames(String askingClient, Socket clientSocket) throws IOException {
         System.out.println(TAG + "askHostToSendFileNames");
         PrintWriter out =
@@ -77,4 +85,6 @@ public class Server {
             }
         }
     }
+
+
 }
