@@ -19,16 +19,9 @@ public class ClientConnectionHandler implements Runnable {
         this.client = client;
     }
 
-    private void sendChosenHostNumber(String fromServer) throws IOException {
-        System.out.println(TAG + "Server asked to chose host");
-        int userInput = Menu.getUserInput();
-        askingClient = fromServer.substring(0, 1);
-        client.sendChosenHostNum(askingClient, userInput);
-    }
-
     private void sendFileNamesToServer(String fromServer) throws IOException {
         System.out.println(TAG + "Server asked to send my file list");
-        askingClient = fromServer.substring(0, 1);
+        askingClient = InputResolver.getClientInstance(fromServer);
         client.sendFileListToServer(askingClient);
     }
 
@@ -47,7 +40,9 @@ public class ClientConnectionHandler implements Runnable {
                     System.out.println(TAG + "nextLine is");
 
                     if (nextLine.contains(Menu.CLIENTS)) {
-                        sendChosenHostNumber(nextLine);
+//                       Client.activateUserInput(client);
+                        System.out.println(TAG + "Clients");
+                        Main.ready = true;
                     } else if (nextLine.contains(Menu.LIST)) {
                         sendFileNamesToServer(nextLine);
                     } else if (nextLine.contains(Menu.FINISHED)) {

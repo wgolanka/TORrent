@@ -10,16 +10,13 @@ import java.nio.file.Files;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 
 public class Client {
     Socket clientSocket;
 
-    private ArrayList<String> fileNames = new ArrayList<>();
-
     private static final String TAG = "    Client: ";
     private String hostName;
-    static String filesPath;
+    String filesPath;
     static String instanceNumber;
 
 
@@ -55,21 +52,6 @@ public class Client {
         toServer.println(instanceNumber);
     }
 
-    void getFilesList() {
-        System.out.println(TAG + "getFileList");
-        String folderPath = "/Users/wgolanka/Documents/School/#3 semester/SKJ/Tor/TORrent_" + instanceNumber;
-        File folder = new File(folderPath);
-        File[] listOfFiles = folder.listFiles();
-
-        if (listOfFiles == null)
-            return;
-
-        for (int i = 0; i < listOfFiles.length; i++) {
-            String name = listOfFiles[i].getName();
-            fileNames.add(name);
-        }
-    }
-
     public void tryAskServerAboutHosts() {
         System.out.println(TAG + "tryAskServerAboutHosts");
 
@@ -103,7 +85,7 @@ public class Client {
 
     public void sendFileListToServer(String askingClient) throws IOException {
         System.out.println(TAG + "sendFileListToServer");
-        
+
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
@@ -144,7 +126,7 @@ public class Client {
         return stringBuffer;
     }
 
-    public void startAgain() { // TODO it is probably launched on thread and shouldn't be.
-        Main.welcomeChoice(this);
+    public void finishConnection() {
+        
     }
 }

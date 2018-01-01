@@ -31,7 +31,7 @@ public class Menu {
                 code = EXIT;
                 break;
             case 1:
-                System.out.println("Chose host which available files you wish to see");
+                System.out.println("Press Host number to select");
                 code = LIST;
                 break;
             case 2:

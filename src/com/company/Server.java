@@ -25,6 +25,7 @@ public class Server {
             out.println(entry.getKey() + ". " + entry.getValue().getRemoteSocketAddress());
         }
         out.println(askingClientInstance + Menu.CLIENTS);
+        System.out.println("Sending CLIENTS LIST finished");
     }
 
     public static void askHostToSendFileNames(String askingClient, Socket clientSocket) throws IOException {
@@ -68,6 +69,8 @@ public class Server {
 
                     Runnable connectionHandler = new ServerConnectionHandler(clientSocket, input);
                     new Thread(connectionHandler).start();
+                    //TODO: connectionHandler shouldn't depend on input from previous host,
+                    //TODO: so connectionHandler should take care of getting client instance
                 }
             } catch (IOException e) {
                 e.printStackTrace();
