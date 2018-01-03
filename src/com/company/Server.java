@@ -58,6 +58,13 @@ public class Server {
         out.println(Menu.FINISHED);
     }
 
+    public static void letClientKnowItCanExit(Socket clientSocket) throws IOException {
+        System.out.println(TAG + "letClientKnowItCanExit");
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+        out.println(Menu.EXIT);
+    }
+
     public static void main(String[] args) throws IOException {
 
         ServerSocket serverSocket = new ServerSocket(10000);

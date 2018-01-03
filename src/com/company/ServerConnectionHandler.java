@@ -84,6 +84,7 @@ public class ServerConnectionHandler implements Runnable {
                     } else if (nextLine.contains(Menu.EXIT)) {
                         System.out.println(TAG + " deleting " + InputResolver.getClientInstance(nextLine));
                         Server.sockets.remove(InputResolver.getClientInstanceInt(nextLine));
+                        Server.letClientKnowItCanExit(clientSocket);
                     }
                 }
             }

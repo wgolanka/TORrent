@@ -9,10 +9,11 @@ public class ClientConnectionHandler implements Runnable {
 
     private Socket clientSocket;
 
+    private volatile boolean exit = false;
+
     private Client client;
 
     private final String TAG = "    ClientConnectionHandler: ";
-    private String askingClient;
 
     public ClientConnectionHandler(Socket socket, Client client) {
         clientSocket = socket;
@@ -21,7 +22,7 @@ public class ClientConnectionHandler implements Runnable {
 
     private void sendFileNamesToServer(String fromServer) throws IOException {
         System.out.println(TAG + "Server asked to send my file list");
-        askingClient = InputResolver.getClientInstance(fromServer);
+        String askingClient = InputResolver.getClientInstance(fromServer);
         client.sendFileListToServer(askingClient);
     }
 
@@ -36,11 +37,18 @@ public class ClientConnectionHandler implements Runnable {
             String nextLine;
 
             while (true) {
+
+                if (exit) {
+                    return;
+                }
+
                 if ((nextLine = in.readLine()) != null) {
                     System.out.println(TAG + "nextLine is");
 
                     if (nextLine.contains(Menu.LIST)) {
                         sendFileNamesToServer(nextLine);
+                    } else if (nextLine.contains(Menu.EXIT)) {
+                        exit = true;
                     } else {
                         System.out.println(nextLine);
                     }

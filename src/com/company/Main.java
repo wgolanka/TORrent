@@ -22,6 +22,7 @@ public class Main {
         Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket, client);
         new Thread(connectionHandler).start();
 
+
         while (true) {
             System.out.println("    START WHILE");
 
@@ -38,7 +39,7 @@ public class Main {
                 choseHost = Menu.getUserInput();
                 client.sendChosenHostNum(Client.instance, choseHost);
 
-                Thread.sleep(3000);
+                Thread.sleep(2000);
                 System.out.println("    END OF IF");
 
                 // TODO if wrong host is choose, 'while' continues instead of waiting for right host to be chosen
