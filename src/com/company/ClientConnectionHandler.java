@@ -10,6 +10,7 @@ public class ClientConnectionHandler implements Runnable {
     private Socket clientSocket;
 
     private volatile boolean exit = false;
+    public static volatile boolean readyToGo = false;
 
     private Client client;
 
@@ -49,6 +50,11 @@ public class ClientConnectionHandler implements Runnable {
                         sendFileNamesToServer(nextLine);
                     } else if (nextLine.contains(Menu.EXIT)) {
                         exit = true;
+                    } else if (nextLine.contains(Menu.HOST)) {
+                        client.setChosenHostState(true);
+
+                    } else if (nextLine.contains(Menu.FINISHED)) {
+                        client.setChosenHostState(false);
                     } else {
                         System.out.println(nextLine);
                     }

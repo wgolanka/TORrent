@@ -36,6 +36,13 @@ public class Server {
         out.println("Please chose different host, last one is not available");
     }
 
+    public static void informThatChosenHostIsOk(Socket clientSocket) throws IOException {
+        System.out.println(TAG + "informThatChosenHostIsOk");
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+        out.println(Menu.HOST);
+    }
+
     public static void askHostToSendFileNames(String askingClient, Socket clientSocket) throws IOException {
         System.out.println(TAG + "askHostToSendFileNames");
         PrintWriter out =

@@ -21,6 +21,7 @@ public class Client {
 
 
     private int portNumber;
+    private boolean isChosen = false;
 
     public Client(String hostName, int portNumber) {
         this.hostName = hostName;
@@ -73,6 +74,37 @@ public class Client {
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
         toServer.println(instance + Menu.CLIENTS);
+    }
+
+    public void tryAskHostForFileNamesFrom(int chosenHost) {
+        System.out.println(TAG + "tryAskHostForFileNamesFrom");
+
+        try {
+            askHostForFileNamesFrom(chosenHost);
+        } catch (UnknownHostException e) {
+            System.err.println("    Don't know about host " + hostName);
+            System.exit(1);
+        } catch (IOException e) {
+            System.err.println("    Client: Couldn't get I/O for the connection to " +
+                    hostName);
+            System.exit(1);
+        }
+    }
+
+    private void askHostForFileNamesFrom(int chosenHost) throws IOException {
+        System.out.println(TAG + "askHostForFileNamesFrom");
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        toServer.println(instance + Menu.FILENAMES + "." + chosenHost);
+    }
+
+    public void setChosenHostState(boolean state) {
+        isChosen = state;
+    }
+
+    public boolean hostIsChosen() {
+        return isChosen;
     }
 
     public void sendChosenHostNum(String askingClient, int userInput) throws IOException {
@@ -134,4 +166,6 @@ public class Client {
         toServer.println(askingClient + Menu.EXIT);
         System.out.println(TAG + "send server info about exit");
     }
+
+
 }

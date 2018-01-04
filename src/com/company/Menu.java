@@ -13,6 +13,7 @@ public class Menu {
     public final static String CLIENTS = "CLIENTS";
     public final static String HOST = "HOST";
     public final static String FINISHED = "FINISHED";
+    public static final String FILENAMES = "FILENAMES";
 
 
     static void showWelcomeOptions() {
@@ -54,14 +55,10 @@ public class Menu {
         System.out.println("    Menu: getUserInput()");
         int code = -1;
 
-//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Scanner scanner = ScannerCoordinator.getInstance().getScanner();
 
         try {
-
-//            code = Integer.parseInt(br.readLine());
             code = scanner.nextInt();
-
             System.out.println("    code: " + code);
 
         } catch (InputMismatchException e) {

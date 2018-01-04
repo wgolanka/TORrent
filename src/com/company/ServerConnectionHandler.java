@@ -12,6 +12,7 @@ public class ServerConnectionHandler implements Runnable {
     private String clientInstance;
     private final String TAG = "    ServerConnectionHandler: ";
 
+
     public ServerConnectionHandler(Socket clientSocket, String clientInstance) {
         this.clientSocket = clientSocket;
         this.clientInstance = clientInstance;
@@ -23,7 +24,7 @@ public class ServerConnectionHandler implements Runnable {
         Server.sendHostList(clientInstance, clientSocket);
     }
 
-    private void askHostToSendFileNames(String fromClient) throws IOException {
+    private void checkIfHostIsAvailable(String fromClient) throws IOException {
 
         System.out.println(TAG + "HOST: " + fromClient);
         int chosenHost = InputResolver.getChosenHostNumber(fromClient);
@@ -31,11 +32,13 @@ public class ServerConnectionHandler implements Runnable {
 
         if (Server.sockets.containsKey(chosenHost)) {
             System.out.println(TAG + chosenHost + ". " + Server.sockets.get(chosenHost).getRemoteSocketAddress());
-            Server.askHostToSendFileNames(clientInstance, Server.sockets.get(chosenHost));
+            Server.informThatChosenHostIsOk(Server.sockets.get(Integer.valueOf(clientInstance)));
+//            Server.askHostToSendFileNames(clientInstance, Server.sockets.get(chosenHost));
         } else {
             Server.askHostToChoseDifferentHost(Server.sockets.get(
                     InputResolver.getClientInstanceInt(fromClient)));
             sendHostList(fromClient);
+
         }
     }
 
@@ -75,12 +78,17 @@ public class ServerConnectionHandler implements Runnable {
                     if (nextLine.contains(Menu.CLIENTS)) {
                         sendHostList(nextLine);
                     } else if (nextLine.contains(Menu.HOST)) {
-                        askHostToSendFileNames(nextLine);
+                        checkIfHostIsAvailable(nextLine);
                     } else if (nextLine.contains(Menu.LIST + ".")) {
                         sendFileName(nextLine);
                     } else if (nextLine.contains(Menu.FINISHED)) {
                         Server.sendFinishCommand(Server.sockets.get(
                                 InputResolver.getClientInstanceInt(nextLine)));
+                    } else if (nextLine.contains(Menu.FILENAMES)) {
+                        String array[] = nextLine.split("\\.");
+                        Server.askHostToSendFileNames(
+                                InputResolver.getClientInstance(nextLine),
+                                Server.sockets.get(Integer.valueOf(array[1])));
                     } else if (nextLine.contains(Menu.EXIT)) {
                         System.out.println(TAG + " deleting " + InputResolver.getClientInstance(nextLine));
                         Server.sockets.remove(InputResolver.getClientInstanceInt(nextLine));
