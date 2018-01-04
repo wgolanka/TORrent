@@ -10,7 +10,6 @@ public class ClientConnectionHandler implements Runnable {
     private Socket clientSocket;
 
     private volatile boolean exit = false;
-    public static volatile boolean readyToGo = false;
 
     private Client client;
 

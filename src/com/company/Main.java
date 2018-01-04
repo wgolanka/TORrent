@@ -5,8 +5,6 @@ import java.io.IOException;
 
 public class Main {
 
-    public static boolean ready = true;
-
     public static void main(String[] args) throws IOException, InterruptedException {
 
         String userChoice;
@@ -21,7 +19,7 @@ public class Main {
 
         Runnable connectionHandler = new ClientConnectionHandler(client.clientSocket, client);
         new Thread(connectionHandler).start();
-        
+
 
         while (true) {
 
@@ -29,18 +27,15 @@ public class Main {
                 System.out.println("Please chose host which would you like to exchange with");
                 System.out.println("Press -1 to update host list");
 
-                while (chosenHost == -1) {
+                do {
                     System.out.println("    ...ABOUT TO CHOSE HOST");
                     client.tryAskServerAboutHosts();
                     chosenHost = Menu.getUserInput();
                 }
+                while (chosenHost == -1);
 
                 client.sendChosenHostNum(Client.instance, chosenHost);
                 Thread.sleep(500);
-
-                if (!client.hostIsChosen()) {
-                    chosenHost = -1;
-                }
             }
 
             System.out.println("    START WHILE AFTER WHILE");
@@ -56,7 +51,6 @@ public class Main {
 
                 Thread.sleep(500);
                 System.out.println("    END OF IF");
-                chosenHost = -1;
 
             } else if (userChoice.equals(Menu.EXIT)) {
                 System.out.println("    IN IF 'EXIT'");
