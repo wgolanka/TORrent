@@ -168,4 +168,7 @@ public class Client {
     }
 
 
+    public void pullFile(String instance, int chosenHost, String fileName) {
+//        TODO: continue, cover situation when files isn't available / wrongly written.
+    }
 }

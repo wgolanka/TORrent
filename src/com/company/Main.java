@@ -52,6 +52,11 @@ public class Main {
                 Thread.sleep(500);
                 System.out.println("    END OF IF");
 
+            } else if (userChoice.contains(Menu.PULL)) {
+                System.out.println("    IN IF 'PULL'");
+                client.tryAskHostForFileNamesFrom(chosenHost);
+                String fileName = Menu.getFileName();
+                client.pullFile(Client.instance, chosenHost, fileName);
             } else if (userChoice.equals(Menu.EXIT)) {
                 System.out.println("    IN IF 'EXIT'");
                 client.finishConnection(Client.instance);

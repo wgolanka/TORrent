@@ -28,11 +28,11 @@ public class Menu {
 
         switch (getUserInput()) {
             case 0:
-                System.out.println("Exit successful");
+                System.out.println("Exiting");
                 code = EXIT;
                 break;
             case 1:
-                System.out.println("Press Host number to select");
+                System.out.println("Listing files...");
                 code = LIST;
                 break;
             case 2:
@@ -66,5 +66,24 @@ public class Menu {
             System.out.println("    Wrong input.");
         }
         return code;
+    }
+
+    public static String getFileName() {
+
+        System.out.println("    Menu: getFileName()");
+
+        String input = "";
+
+        Scanner scanner = ScannerCoordinator.getInstance().getScanner();
+
+        try {
+            input = scanner.next();
+            System.out.println("    StringInput: " + input);
+
+        } catch (InputMismatchException e) {
+            e.getStackTrace();
+            System.out.println("    Wrong input.");
+        }
+        return input;
     }
 }
