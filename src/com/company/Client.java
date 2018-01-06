@@ -1,9 +1,6 @@
 package com.company;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -96,7 +93,7 @@ public class Client {
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        toServer.println(instance + Menu.FILENAMES + "." + chosenHost);
+        toServer.println(instance + Menu.FILENAMES + "/" + chosenHost);
     }
 
     public void setChosenHostState(boolean state) {
@@ -124,7 +121,7 @@ public class Client {
         final File folder = new File(filesPath);
         for (final File fileEntry : folder.listFiles()) {
             if (!fileEntry.isDirectory()) {
-                toServer.println(askingClient + Menu.LIST + "." + fileEntry.getName() +
+                toServer.println(askingClient + Menu.LIST + "/" + fileEntry.getName() +
                         " MD5: " + addMD5(fileEntry));
             }
         }
@@ -168,7 +165,53 @@ public class Client {
     }
 
 
-    public void pullFile(String instance, int chosenHost, String fileName) {
+    public void pullFile(String instance, int chosenHost, String fileName) throws IOException {
 //        TODO: continue, cover situation when files isn't available / wrongly written.
+
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        toServer.println(instance + Menu.PULL + chosenHost + "/" + fileName);
+
     }
+
+    public void sendFileToServer(String askingClient, String fileName) throws IOException {
+
+        fileName = filesPath + "/" + fileName;
+
+        File myFile = new File(fileName);
+        byte[] fileBytes = new byte[(int) myFile.length()];
+
+        BufferedInputStream bufferedInputStream =
+                new BufferedInputStream(new FileInputStream(myFile));
+
+        bufferedInputStream.read(fileBytes, 0, fileBytes.length);
+
+        String command = askingClient + "/" + Menu.PULL;
+
+        byte[] fileAndCommand = joinBoth(command.getBytes(), fileBytes);
+        fileBytes = joinBoth(fileAndCommand, fileBytes);
+
+
+        OutputStream toServer = clientSocket.getOutputStream();
+
+        toServer.write(fileBytes, 0, fileBytes.length);
+
+        System.out.println("Send " + fileName + "(" + fileBytes.length + " bytes)");
+    }
+
+    public static byte[] joinBoth(byte[] arr, byte[] arr1) {
+        byte[] both = new byte[arr.length + arr1.length];
+        int j = 0;
+        for (int i = 0; i < both.length; i++) {
+
+            if (i < arr.length) {
+                both[i] = arr[i];
+            } else {
+                both[i] = arr1[j++];
+            }
+        }
+        return both;
+    }
+
 }

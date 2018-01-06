@@ -51,6 +51,14 @@ public class Server {
         out.println(askingClient + Menu.LIST);
     }
 
+    public static void askHostToSendFile(String askingClient, Socket clientSocket, String fileName) throws IOException {
+        System.out.println(TAG + "askHostToSendFile");
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        out.println(askingClient + Menu.PULL + "/" + fileName);
+    }
+
     public static void sendFileName(String fileName, Socket clientSocket) throws IOException {
         System.out.println(TAG + "SendFileName");
         PrintWriter out =

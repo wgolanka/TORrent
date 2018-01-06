@@ -35,7 +35,7 @@ public class Main {
                 while (chosenHost == -1);
 
                 client.sendChosenHostNum(Client.instance, chosenHost);
-                Thread.sleep(500);
+                Thread.sleep(2000);
             }
 
             System.out.println("    START WHILE AFTER WHILE");
@@ -49,7 +49,7 @@ public class Main {
 
                 client.tryAskHostForFileNamesFrom(chosenHost);
 
-                Thread.sleep(500);
+                Thread.sleep(2000);
                 System.out.println("    END OF IF");
 
             } else if (userChoice.contains(Menu.PULL)) {

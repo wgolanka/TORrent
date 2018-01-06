@@ -26,6 +26,16 @@ public class ClientConnectionHandler implements Runnable {
         client.sendFileListToServer(askingClient);
     }
 
+    private void sendFileToServer(String fromServer) throws IOException {
+        String array[] = fromServer.split("/");
+        System.out.println(TAG + "Server asked to send my file: " + array[1]);
+
+        client.sendFileToServer(
+                InputResolver.getClientInstance(fromServer),
+                array[1]
+        );
+    }
+
     @Override
     public void run() {
         BufferedReader in;
@@ -43,7 +53,7 @@ public class ClientConnectionHandler implements Runnable {
                 }
 
                 if ((nextLine = in.readLine()) != null) {
-                    System.out.println(TAG + "nextLine is");
+                    System.out.println(TAG + "nextLine is " + nextLine);
 
                     if (nextLine.contains(Menu.LIST)) {
                         sendFileNamesToServer(nextLine);
@@ -52,15 +62,20 @@ public class ClientConnectionHandler implements Runnable {
                     } else if (nextLine.contains(Menu.HOST)) {
                         client.setChosenHostState(true);
 
+                    } else if (nextLine.contains(Menu.PULL)) {
+                        sendFileToServer(nextLine);
                     } else if (nextLine.contains(Menu.FINISHED)) {
                         client.setChosenHostState(false);
                     } else {
                         System.out.println(nextLine);
                     }
+
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
 }

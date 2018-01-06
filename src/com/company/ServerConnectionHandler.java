@@ -49,7 +49,7 @@ public class ServerConnectionHandler implements Runnable {
 
         if (Server.sockets.containsKey(clientNumber)) {
 
-            System.out.println(TAG + "sendFileList to " + clientInstance + ". " +
+            System.out.println(TAG + "sendFileList to " + clientInstance + "/ " +
                     Server.sockets.get(clientNumber).getRemoteSocketAddress());
 
             Server.sendFileName(InputResolver.getFileName(fromClient), Server.sockets.get(clientNumber));
@@ -79,16 +79,23 @@ public class ServerConnectionHandler implements Runnable {
                         sendHostList(nextLine);
                     } else if (nextLine.contains(Menu.HOST)) {
                         checkIfHostIsAvailable(nextLine);
-                    } else if (nextLine.contains(Menu.LIST + ".")) {
+                    } else if (nextLine.contains(Menu.LIST + "/")) {
                         sendFileName(nextLine);
                     } else if (nextLine.contains(Menu.FINISHED)) {
                         Server.sendFinishCommand(Server.sockets.get(
                                 InputResolver.getClientInstanceInt(nextLine)));
                     } else if (nextLine.contains(Menu.FILENAMES)) {
-                        String array[] = nextLine.split("\\.");
+                        String array[] = nextLine.split("/");
                         Server.askHostToSendFileNames(
                                 InputResolver.getClientInstance(nextLine),
                                 Server.sockets.get(Integer.valueOf(array[1])));
+                    } else if (nextLine.contains(Menu.PULL)) {
+                        String array[] = nextLine.split("/");
+                        Server.askHostToSendFile(
+                                InputResolver.getClientInstance(nextLine),
+                                Server.sockets.get(
+                                        InputResolver.getChosenHostNumber(nextLine)),
+                                array[1]);
                     } else if (nextLine.contains(Menu.EXIT)) {
                         System.out.println(TAG + " deleting " + InputResolver.getClientInstance(nextLine));
                         Server.sockets.remove(InputResolver.getClientInstanceInt(nextLine));
