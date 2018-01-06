@@ -109,4 +109,11 @@ public class Server {
     }
 
 
+    public static void sendFile(String clientInstance, String nextLine) throws IOException {
+        System.out.println(TAG + "sendFIle");
+        PrintWriter out =
+                new PrintWriter(sockets.get(Integer.valueOf(clientInstance)).getOutputStream(),
+                        true);
+        out.println(nextLine);
+    }
 }

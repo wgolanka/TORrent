@@ -176,28 +176,31 @@ public class Client {
     }
 
     public void sendFileToServer(String askingClient, String fileName) throws IOException {
+        //TODO add real byte length in command
+        String filePath = filesPath + "/" + fileName;
 
-        fileName = filesPath + "/" + fileName;
-
-        File myFile = new File(fileName);
+        File myFile = new File(filePath);
         byte[] fileBytes = new byte[(int) myFile.length()];
-
         BufferedInputStream bufferedInputStream =
                 new BufferedInputStream(new FileInputStream(myFile));
-
         bufferedInputStream.read(fileBytes, 0, fileBytes.length);
 
-        String command = askingClient + "/" + Menu.PULL;
+        String command = askingClient + "/" + Menu.PUSH + ";" + fileName + ";";
 
-        byte[] fileAndCommand = joinBoth(command.getBytes(), fileBytes);
-        fileBytes = joinBoth(fileAndCommand, fileBytes);
+        StringBuilder stringBuilder = new StringBuilder();
 
+        for (byte b : fileBytes) {
+            stringBuilder.append(String.valueOf(b));
+            stringBuilder.append("/");
+        }
 
-        OutputStream toServer = clientSocket.getOutputStream();
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
 
-        toServer.write(fileBytes, 0, fileBytes.length);
+        toServer.println(command + stringBuilder);
+        System.out.println("fileBytes as string: " + stringBuilder);
 
-        System.out.println("Send " + fileName + "(" + fileBytes.length + " bytes)");
+        System.out.println("Send " + filePath + "(" + fileBytes.length + " bytes)");
     }
 
     public static byte[] joinBoth(byte[] arr, byte[] arr1) {
@@ -214,4 +217,33 @@ public class Client {
         return both;
     }
 
+    public void receiveFile(String nextLine) throws IOException {
+        byte file[] = new byte[966024];
+        String allSplitted[] = nextLine.split(";");
+
+        String arr[] = allSplitted[2].split("/");
+
+
+        for (int i = 0; i < arr.length; i++) {
+            file[i] = Byte.valueOf(arr[i]);
+        }
+
+        String fileReceived = "/Users/wgolanka/Documents/School/#3 semester/SKJ/Tor/TORrent_" +
+                InputResolver.getClientInstance(nextLine) + "/" + allSplitted[1];
+
+        System.out.println("fileReceived " + fileReceived);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(fileReceived);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+
+        bos.write(file, 0, file.length);
+
+
+        System.out.println("File " + fileReceived
+                + " downloaded (" + file.length + " bytes read)");
+    }
 }

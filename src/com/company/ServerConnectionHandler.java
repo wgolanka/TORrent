@@ -71,24 +71,29 @@ public class ServerConnectionHandler implements Runnable {
             String nextLine;
 
             while (true) {
+
                 if ((nextLine = in.readLine()) != null) {
-                    System.out.println();
                     System.out.println(TAG + nextLine);
 
                     if (nextLine.contains(Menu.CLIENTS)) {
                         sendHostList(nextLine);
+
                     } else if (nextLine.contains(Menu.HOST)) {
                         checkIfHostIsAvailable(nextLine);
+
                     } else if (nextLine.contains(Menu.LIST + "/")) {
                         sendFileName(nextLine);
+
                     } else if (nextLine.contains(Menu.FINISHED)) {
                         Server.sendFinishCommand(Server.sockets.get(
                                 InputResolver.getClientInstanceInt(nextLine)));
+
                     } else if (nextLine.contains(Menu.FILENAMES)) {
                         String array[] = nextLine.split("/");
                         Server.askHostToSendFileNames(
                                 InputResolver.getClientInstance(nextLine),
                                 Server.sockets.get(Integer.valueOf(array[1])));
+
                     } else if (nextLine.contains(Menu.PULL)) {
                         String array[] = nextLine.split("/");
                         Server.askHostToSendFile(
@@ -96,10 +101,15 @@ public class ServerConnectionHandler implements Runnable {
                                 Server.sockets.get(
                                         InputResolver.getChosenHostNumber(nextLine)),
                                 array[1]);
+
                     } else if (nextLine.contains(Menu.EXIT)) {
                         System.out.println(TAG + " deleting " + InputResolver.getClientInstance(nextLine));
                         Server.sockets.remove(InputResolver.getClientInstanceInt(nextLine));
                         Server.letClientKnowItCanExit(clientSocket);
+
+                    } else if (nextLine.contains(Menu.PUSH)) {
+                        Server.sendFile(InputResolver.getClientInstance(nextLine), nextLine);
+
                     }
                 }
             }

@@ -66,6 +66,8 @@ public class ClientConnectionHandler implements Runnable {
                         sendFileToServer(nextLine);
                     } else if (nextLine.contains(Menu.FINISHED)) {
                         client.setChosenHostState(false);
+                    } else if (nextLine.contains(Menu.PUSH)) {
+                        client.receiveFile(nextLine);
                     } else {
                         System.out.println(nextLine);
                     }
