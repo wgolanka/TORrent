@@ -66,6 +66,16 @@ public class Server {
         out.println(fileName);
     }
 
+    public static void sendErrorMsg(Socket clientSocket, String message) throws IOException {
+        System.out.println(TAG + "SendErrorMessage");
+        PrintWriter out =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+        out.println(message);
+
+        sendFinishCommand(clientSocket);
+
+    }
+
     public static void sendFinishCommand(Socket clientSocket) throws IOException {
         System.out.println(TAG + "sendFinishCommand");
         PrintWriter out =
@@ -116,4 +126,6 @@ public class Server {
                         true);
         out.println(nextLine);
     }
+
+
 }

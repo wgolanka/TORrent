@@ -166,7 +166,7 @@ public class Client {
 
 
     public void pullFile(String instance, int chosenHost, String fileName) throws IOException {
-//        TODO: continue, cover situation when files isn't available / wrongly written.
+//        TODO: continue, cover situation when file isn't available / wrongly written.
 
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
@@ -177,9 +177,18 @@ public class Client {
 
     public void sendFileToServer(String askingClient, String fileName) throws IOException {
         //TODO add real byte length in command
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
         String filePath = filesPath + "/" + fileName;
 
-        File myFile = new File(filePath);
+        File myFile = getFile(filePath);
+
+        if (myFile == null) {
+            informClientAboutWrongFileNameAndFinish(askingClient, fileName);
+            return;
+        }
+
         byte[] fileBytes = new byte[(int) myFile.length()];
         BufferedInputStream bufferedInputStream =
                 new BufferedInputStream(new FileInputStream(myFile));
@@ -194,13 +203,29 @@ public class Client {
             stringBuilder.append("/");
         }
 
-        PrintWriter toServer =
-                new PrintWriter(clientSocket.getOutputStream(), true);
 
         toServer.println(command + stringBuilder);
         System.out.println("fileBytes as string: " + stringBuilder);
 
         System.out.println("Send " + filePath + "(" + fileBytes.length + " bytes)");
+    }
+
+    private File getFile(String path) {
+
+        File file = new File(path);
+
+        if (file.exists() && !file.isDirectory()) {
+            return file;
+        } else {
+            return null;
+        }
+    }
+
+    private void informClientAboutWrongFileNameAndFinish(String askingClient, String fileName) throws IOException {
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        toServer.println(askingClient + Menu.ERROR + "/" + "File: " + fileName + " is not available or doesn't exist");
     }
 
     public static byte[] joinBoth(byte[] arr, byte[] arr1) {

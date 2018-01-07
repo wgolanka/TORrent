@@ -14,6 +14,7 @@ public class Menu {
     public final static String HOST = "HOST";
     public final static String FINISHED = "FINISHED";
     public static final String FILENAMES = "FILENAMES";
+    public static final String ERROR = "ERROR";
 
 
     static void showWelcomeOptions() {

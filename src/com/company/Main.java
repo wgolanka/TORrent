@@ -23,20 +23,17 @@ public class Main {
 
         while (true) {
 
-            while (!client.hostIsChosen()) {
-                System.out.println("Please chose host which would you like to exchange with");
-                System.out.println("Press -1 to update host list");
+            System.out.println("Please chose host which would you like to exchange with");
+            System.out.println("Press -1 to update host list");
 
-                do {
-                    System.out.println("    ...ABOUT TO CHOSE HOST");
-                    client.tryAskServerAboutHosts();
-                    chosenHost = Menu.getUserInput();
-                }
-                while (chosenHost == -1);
+            client.tryAskServerAboutHosts();
+            chosenHost = Menu.getUserInput();
 
-                client.sendChosenHostNum(Client.instance, chosenHost);
-                Thread.sleep(2000);
+            if (chosenHost == -1) {
+                continue;
             }
+
+            client.sendChosenHostNum(Client.instance, chosenHost);
 
             System.out.println("    START WHILE AFTER WHILE");
             Menu.showWelcomeOptions();
@@ -48,20 +45,26 @@ public class Main {
                 System.out.println("    IN IF 'LIST'");
 
                 client.tryAskHostForFileNamesFrom(chosenHost);
-
-                Thread.sleep(2000);
                 System.out.println("    END OF IF");
 
             } else if (userChoice.contains(Menu.PULL)) {
+
                 System.out.println("    IN IF 'PULL'");
                 client.tryAskHostForFileNamesFrom(chosenHost);
+
+                System.out.println("Type file name (with its extension) which would you like to download");
                 String fileName = Menu.getFileName();
+
                 client.pullFile(Client.instance, chosenHost, fileName);
+
             } else if (userChoice.equals(Menu.EXIT)) {
                 System.out.println("    IN IF 'EXIT'");
                 client.finishConnection(Client.instance);
                 System.exit(1);
             }
+
+            Thread.sleep(2000);
+
             System.out.println("    OUT OF IF");
         }
     }

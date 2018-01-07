@@ -33,11 +33,13 @@ public class ServerConnectionHandler implements Runnable {
         if (Server.sockets.containsKey(chosenHost)) {
             System.out.println(TAG + chosenHost + ". " + Server.sockets.get(chosenHost).getRemoteSocketAddress());
             Server.informThatChosenHostIsOk(Server.sockets.get(Integer.valueOf(clientInstance)));
-//            Server.askHostToSendFileNames(clientInstance, Server.sockets.get(chosenHost));
         } else {
             Server.askHostToChoseDifferentHost(Server.sockets.get(
                     InputResolver.getClientInstanceInt(fromClient)));
             sendHostList(fromClient);
+
+
+            //TODO cover situation when wrong host number is send
 
         }
     }
@@ -110,6 +112,11 @@ public class ServerConnectionHandler implements Runnable {
                     } else if (nextLine.contains(Menu.PUSH)) {
                         Server.sendFile(InputResolver.getClientInstance(nextLine), nextLine);
 
+                    } else if (nextLine.contains(Menu.ERROR)) {
+                        String commandAndMessage[] = nextLine.split("/");
+
+                        Server.sendErrorMsg(Server.sockets.get(
+                                InputResolver.getClientInstanceInt(nextLine)), commandAndMessage[1]);
                     }
                 }
             }
