@@ -166,7 +166,6 @@ public class Client {
 
 
     public void pullFile(String instance, int chosenHost, String fileName) throws IOException {
-//        TODO: continue, cover situation when file isn't available / wrongly written.
 
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
