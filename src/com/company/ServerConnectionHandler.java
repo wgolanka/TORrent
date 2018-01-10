@@ -24,25 +24,6 @@ public class ServerConnectionHandler implements Runnable {
         Server.sendHostList(clientInstance, clientSocket);
     }
 
-    private void checkIfHostIsAvailable(String fromClient) throws IOException {
-
-        System.out.println(TAG + "HOST: " + fromClient);
-        int chosenHost = InputResolver.getChosenHostNumber(fromClient);
-        clientInstance = InputResolver.getClientInstance(fromClient);
-
-        if (Server.sockets.containsKey(chosenHost)) {
-            System.out.println(TAG + chosenHost + ". " + Server.sockets.get(chosenHost).getRemoteSocketAddress());
-            Server.informThatChosenHostIsOk(Server.sockets.get(Integer.valueOf(clientInstance)));
-        } else {
-            Server.askHostToChoseDifferentHost(Server.sockets.get(
-                    InputResolver.getClientInstanceInt(fromClient)));
-            sendHostList(fromClient);
-
-
-            //TODO cover situation when wrong host number is send
-
-        }
-    }
 
     private void sendFileName(String fromClient) throws IOException {
 
@@ -81,12 +62,13 @@ public class ServerConnectionHandler implements Runnable {
                         sendHostList(nextLine);
 
                     } else if (nextLine.contains(Menu.HOST)) {
-                        checkIfHostIsAvailable(nextLine);
+
 
                     } else if (nextLine.contains(Menu.LIST + "/")) {
                         sendFileName(nextLine);
 
                     } else if (nextLine.contains(Menu.FINISHED)) {
+
                         Server.sendFinishCommand(Server.sockets.get(
                                 InputResolver.getClientInstanceInt(nextLine)));
 

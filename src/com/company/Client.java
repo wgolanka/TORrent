@@ -74,7 +74,7 @@ public class Client {
     }
 
     public void tryAskHostForFileNamesFrom(int chosenHost) {
-        System.out.println(TAG + "tryAskHostForFileNamesFrom");
+
 
         try {
             askHostForFileNamesFrom(chosenHost);
@@ -94,14 +94,6 @@ public class Client {
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
         toServer.println(instance + Menu.FILENAMES + "/" + chosenHost);
-    }
-
-    public void setChosenHostState(boolean state) {
-        isChosen = state;
-    }
-
-    public boolean hostIsChosen() {
-        return isChosen;
     }
 
     public void sendChosenHostNum(String askingClient, int userInput) throws IOException {
@@ -161,7 +153,6 @@ public class Client {
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
         toServer.println(askingClient + Menu.EXIT);
-        System.out.println(TAG + "send server info about exit");
     }
 
 
@@ -183,7 +174,7 @@ public class Client {
 
         File myFile = getFile(filePath);
 
-        if (myFile == null) {
+        if (myFile == null || fileName.contains("/")) {
             informClientAboutWrongFileNameAndFinish(askingClient, fileName);
             return;
         }
@@ -193,7 +184,7 @@ public class Client {
                 new BufferedInputStream(new FileInputStream(myFile));
         bufferedInputStream.read(fileBytes, 0, fileBytes.length);
 
-        String command = askingClient + "/" + Menu.PUSH + ";" + fileName + ";";
+
 
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -202,52 +193,25 @@ public class Client {
             stringBuilder.append("/");
         }
 
+        String command = askingClient + "/" + Menu.PUSH + ";" + fileName + ";" + fileBytes.length + ";";
 
         toServer.println(command + stringBuilder);
+        System.out.println("RECEIVE BYTES : " + fileBytes.length);
         System.out.println("fileBytes as string: " + stringBuilder);
 
         System.out.println("Send " + filePath + "(" + fileBytes.length + " bytes)");
     }
 
-    private File getFile(String path) {
-
-        File file = new File(path);
-
-        if (file.exists() && !file.isDirectory()) {
-            return file;
-        } else {
-            return null;
-        }
-    }
-
-    private void informClientAboutWrongFileNameAndFinish(String askingClient, String fileName) throws IOException {
-        PrintWriter toServer =
-                new PrintWriter(clientSocket.getOutputStream(), true);
-
-        toServer.println(askingClient + Menu.ERROR + "/" + "File: " + fileName + " is not available or doesn't exist");
-    }
-
-    public static byte[] joinBoth(byte[] arr, byte[] arr1) {
-        byte[] both = new byte[arr.length + arr1.length];
-        int j = 0;
-        for (int i = 0; i < both.length; i++) {
-
-            if (i < arr.length) {
-                both[i] = arr[i];
-            } else {
-                both[i] = arr1[j++];
-            }
-        }
-        return both;
-    }
-
     public void receiveFile(String nextLine) throws IOException {
-        byte file[] = new byte[966024];
+
         String allSplitted[] = nextLine.split(";");
 
-        String arr[] = allSplitted[2].split("/");
+        String arr[] = allSplitted[3].split("/");
 
+        System.out.println(allSplitted[2]);
+        System.out.println("RECEIVE BYTES : " + Integer.valueOf(allSplitted[2]));
 
+        byte file[] = new byte[Integer.valueOf(allSplitted[2])];
         for (int i = 0; i < arr.length; i++) {
             file[i] = Byte.valueOf(arr[i]);
         }
@@ -269,5 +233,24 @@ public class Client {
 
         System.out.println("File " + fileReceived
                 + " downloaded (" + file.length + " bytes read)");
+    }
+
+
+    private File getFile(String path) {
+
+        File file = new File(path);
+
+        if (file.exists() && !file.isDirectory()) {
+            return file;
+        } else {
+            return null;
+        }
+    }
+
+    private void informClientAboutWrongFileNameAndFinish(String askingClient, String fileName) throws IOException {
+        PrintWriter toServer =
+                new PrintWriter(clientSocket.getOutputStream(), true);
+
+        toServer.println(askingClient + Menu.ERROR + "/" + "File: " + fileName + " is not available or doesn't exist");
     }
 }

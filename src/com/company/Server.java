@@ -14,9 +14,23 @@ public class Server {
     static HashMap<Integer, Socket> sockets;
     private static final String TAG = "    Server: ";
 
+    private static boolean socketIsAvailable(Socket askingSocket, Socket chosenSocket) throws IOException {
+
+        if (!Server.sockets.containsValue(chosenSocket)) {
+            Server.askHostToChoseDifferentHost(askingSocket);
+            return false;
+        }
+        return true;
+    }
+
 
     public static void sendHostList(String askingClientInstance, Socket clientSocket) throws IOException {
         System.out.println(TAG + "sendHostList");
+
+        if (!socketIsAvailable(sockets.get(InputResolver.getClientInstanceInt(askingClientInstance)),
+                clientSocket)) {
+            return;
+        }
 
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
@@ -33,7 +47,7 @@ public class Server {
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
-        out.println("Please chose different host, last one is not available");
+        out.println("Please type -1 to try again, else options will not work properly right now");
     }
 
     public static void informThatChosenHostIsOk(Socket clientSocket) throws IOException {
@@ -45,6 +59,12 @@ public class Server {
 
     public static void askHostToSendFileNames(String askingClient, Socket clientSocket) throws IOException {
         System.out.println(TAG + "askHostToSendFileNames");
+
+        if (!socketIsAvailable(sockets.get(InputResolver.getClientInstanceInt(askingClient)),
+                clientSocket)) {
+            return;
+        }
+
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
@@ -53,6 +73,12 @@ public class Server {
 
     public static void askHostToSendFile(String askingClient, Socket clientSocket, String fileName) throws IOException {
         System.out.println(TAG + "askHostToSendFile");
+
+        if (!socketIsAvailable(sockets.get(InputResolver.getClientInstanceInt(askingClient)),
+                clientSocket)) {
+            return;
+        }
+
         PrintWriter out =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 

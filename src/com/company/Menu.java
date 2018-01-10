@@ -15,10 +15,13 @@ public class Menu {
     public final static String FINISHED = "FINISHED";
     public static final String FILENAMES = "FILENAMES";
     public static final String ERROR = "ERROR";
+    public static final String CONTINUE = "CONTINUE";
 
 
     static void showWelcomeOptions() {
-        System.out.println("Press 0 to " + EXIT +
+        System.out.println("" +
+                "Press -1 to try again if something went wrong" +
+                "\nPress 0 to " + EXIT +
                 "\nPress 1 to " + LIST + " files" +
                 "\nPress 2 to " + PULL + " file" +
                 "\nPress 3 to " + PUSH + " files");
@@ -28,6 +31,9 @@ public class Menu {
         String code = EXIT;
 
         switch (getUserInput()) {
+            case -1:
+                code = CONTINUE;
+                break;
             case 0:
                 System.out.println("Exiting");
                 code = EXIT;

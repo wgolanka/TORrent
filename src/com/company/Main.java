@@ -35,23 +35,20 @@ public class Main {
 
             client.sendChosenHostNum(Client.instance, chosenHost);
 
-            System.out.println("    START WHILE AFTER WHILE");
 
             Menu.showWelcomeOptions();
             userChoice = Menu.getUserWelcomeChoice();
 //          TODO: loop continues after user choose wrong host and
 //          it generates nullptr excep in  ServerConnectionHandler 95
 
-            System.out.println("    BEFORE IF");
             if (userChoice.equals(Menu.LIST)) {
-                System.out.println("    IN IF 'LIST'");
 
                 client.tryAskHostForFileNamesFrom(chosenHost);
 
             } else if (userChoice.contains(Menu.PULL)) {
 
-                System.out.println("    IN IF 'PULL'");
                 client.tryAskHostForFileNamesFrom(chosenHost);
+                Thread.sleep(500);
 
                 System.out.println("Type file name (with its extension) which would you like to download");
                 String fileName = Menu.getFileName();
@@ -59,9 +56,9 @@ public class Main {
                 client.pullFile(Client.instance, chosenHost, fileName);
 
             } else if (userChoice.contains(Menu.PUSH)) {
-                System.out.println("    IN IF 'PUSH'");
 
                 client.tryAskHostForFileNamesFrom(Integer.valueOf(args[0]));
+                Thread.sleep(500);
 
                 System.out.println("Type file name (with its extension) which would you like to push to the chosen host");
                 String fileName = Menu.getFileName();
@@ -69,14 +66,11 @@ public class Main {
 
                 client.sendFileToServer(command, fileName);
             } else if (userChoice.equals(Menu.EXIT)) {
-                System.out.println("    IN IF 'EXIT'");
                 client.finishConnection(Client.instance);
                 System.exit(1);
             }
 
             Thread.sleep(3000);
-
-            System.out.println("    OUT OF IF");
         }
     }
 }
