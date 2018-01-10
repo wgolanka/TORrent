@@ -166,7 +166,6 @@ public class Client {
     }
 
     public void sendFileToServer(String askingClient, String fileName) throws IOException {
-        //TODO add real byte length in command
         PrintWriter toServer =
                 new PrintWriter(clientSocket.getOutputStream(), true);
 
